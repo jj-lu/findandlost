@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>物品信息管理</title>
+
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+<!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+<style type="text/css">
+@media ( min-width : 768px) {
+	.container_main {
+		margin-top: 55px;;
+		margin-left: 255px;
+	}
+}
+</style>
+</head>
+<body>
+	<!--导航条-->
+	
+			<!--物品-->
+			<div class="col-md-12">
+				<!--面板-->
+				<div class="panel panel-default panel-title">
+					<!-- Default panel contents -->
+					<!--面板头-->
+					<div class="panel panel-primary">
+						<h4>物品信息管理</h4>
+					</div>
+					<!--面板体-->
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-md-1"></div>
+							<form th:action="@{/findGoodsByg_status(pageNum = 1)}"
+								method="post">
+								<div class="col-md-3">
+									<input type="text" class="form-control" placeholder="失物名称"
+										name="g_name">
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control" placeholder="失物地点"
+										name="g_place">
+								</div>
+								<div class="col-md-2">
+
+									<select style="width: 170px; height: 35px;" name="g_type">
+										<option value="" selected="selected">---失物类型---</option>
+										<option value="电子产品">电子产品</option>
+										<option value="贵重物品">贵重物品</option>
+										<option value="书籍">书籍</option>
+										<option value="证件">证件</option>
+										<option value="服饰">服饰</option>
+										<option value="其他">其他</option>
+									</select>
+<!-- 									<input type="hidden" name="classification.c_type" th:value="${c_type}"> -->
+								</div>
+								<div class="col-md-2">
+									<div class="input-group">
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="submit">查询</button>
+										</span> <a href="#" class="btn btn-primary" data-toggle="modal"
+											data-target="#newGoodsDialog">新建</a>
+									</div>
+									<!-- /input-group -->
+								</div>
+							</form>
+						</div>
+
+					</div>
+					<div class="panel-body">
+						<!-- Table 6条-->
+						<!-- 物品信息 -->
+						<table class="table table-striped table-hover">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>失物名称</th>
+									<th>失物类型</th>
+									<th>失物地点</th>
+									<th>发布时间</th>
+									<th>发布者</th>
+									<th>当前状态</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="good,stat : ${goods}">
+									<td style="vertical-align: middle !important;"
+										th:text="${stat.count}">1</td>
+									<td style="vertical-align: middle !important;"
+										th:text="${good.g_name}">2</td>
+									<td style="vertical-align: middle !important;"
+										th:text="${good.g_type}">3</td>
+									<td style="vertical-align: middle !important;"
+										th:text="${good.g_place}">4</td>
+									<td style="vertical-align: middle !important;"
+										th:text="${good.g_rtime}">3</td>
+									<td style="vertical-align: middle !important;"
+										th:text="${good.user.username}"></td>
+									<td style="vertical-align: middle !important;"
+										th:text="${good.classification.c_status}"></td>
+									<td width="250px">
+										<div class="btn-group btn-group-justified" role="group"
+											aria-label="...">
+											<div class="btn-group" role="group">
+												<!-- th:onclick="'javascript:test(\''+${classType.id}+'\')'"></span>
+										  	 -->
+												<button type="button" class="btn btn-default"
+													data-toggle="modal" data-target="#editGoodsDialog"
+													th:onclick="|editGoods(${good.g_id})|">修改</button>
+											</div>
+											<div class="btn-group" role="group">
+												<button type="button" class="btn btn-default"
+													th:onclick="|deleteGoods(${good.g_id})|">删除</button>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+
+					</div>
+				</div>
+
+
+				<!--面板尾注-->
+					<div class="panel-footer">
+					  	<nav aria-label="...">
+							  <ul class="pager">
+							    <li><a th:href="@{findGoodsByg_status(pageNum = ${goods.PageNum}-1,g_name=${g_name},g_place=${g_place},g_type=${g_type},classification.c_type=${c_type})}">上一页</a></li>
+							    <li>第<span th:text="${goods.PageNum}"></span>页</li>
+							    <li><a th:href="@{findGoodsByg_status(pageNum = ${goods.PageNum}+1,g_name=${g_name},g_place=${g_place},g_type=${g_type},classification.c_type=${c_type})}">下一页</a></li>
+							  </ul>
+							</nav>
+					  </div>
+			</div>
+			
+
+
+
+
+
+
+
+
+	<!--新建物品模态框-->
+	<div class="modal fade" id="newGoodsDialog" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">新建失物信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="new_goods_form">
+						<div class="form-group">
+							<label class="col-sm-2 control-label"> 失物名称 </label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" placeholder="失物名称"
+									name="g_name" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">丢失时间</label>
+							<div class="col-sm-10">
+								<input type="date" class="form-control" placeholder="丢失时间"
+									name="g_ltime" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">丢失地点</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" placeholder="丢失地点"
+									name="g_place" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">失物标题</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" placeholder="失物标题"
+									name="g_title" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">描述信息</label>
+							<div class="col-sm-10">
+<!-- 								<input type="text" class="form-control" placeholder="描述信息" -->
+<!-- 									name="g_describe" /> -->
+								<textarea rows="3" class=form-control placeholder="描述信息" name="g_describe" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">关键信息</label>
+							<div class="col-sm-10">
+<!-- 								<input type="text" class="form-control" placeholder="关键信息" -->
+<!-- 									name="g_key" /> -->
+								<textarea rows="3" class=form-control placeholder="关键信息" name="g_key" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">失物类型</label>
+							<div class="col-sm-10">
+								<select class="form-control" name="g_type">
+									<option value="" selected="selected">---失物类型---</option>
+									<option value="电子产品">电子产品</option>
+									<option value="贵重物品">贵重物品</option>
+									<option value="书籍">书籍</option>
+									<option value="证件">证件</option>
+									<option value="服饰">服饰</option>
+									<option value="其他">其他</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">失物状态</label>
+							<div class="col-sm-10"
+								th:if="${c_type == '寻物'}">
+								<select class="form-control" name="classification.c_status">
+									<option value="寻物中" selected="selected">寻物中</option>
+									<option value="已找回">已找回</option>
+								</select>
+							</div>
+							<div class="col-sm-10"
+								th:if="${c_type == '招领'}">
+								<select class="form-control" name="classification.c_status">
+									<option value="招领中" selected="selected">招领中</option>
+									<option value="已归还">已归还</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">上传图片</label>
+							<div class="col-sm-10">
+								<input type="file" class="form-control" placeholder="上传图片"
+									name="file" />
+							</div>
+							<input type="hidden" name="user.u_id" value="1">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary"
+						onclick="createGoods()">添加失物</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--修改物品模态框-->
+	<div class="modal fade" id="editGoodsDialog" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">修改用户信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="edit_goods_form">
+						<div class="form-group">
+							<label class="col-sm-2 control-label"> 失物名称 </label>
+							<div class="col-sm-10">
+								<input type="text" id="g_name" class="form-control"
+									placeholder="失物名称" name="g_name" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">丢失时间</label>
+							<div class="col-sm-10">
+								<input type="date" id="g_ltime" class="form-control"
+									placeholder="丢失时间" name="g_ltime" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">丢失地点</label>
+							<div class="col-sm-10">
+								<input type="text" id="g_place" class="form-control"
+									placeholder="丢失地点" name="g_place" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">失物标题</label>
+							<div class="col-sm-10">
+								<input type="text" id="g_title" class="form-control"
+									placeholder="失物标题" name="g_title" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">描述信息</label>
+							<div class="col-sm-10">
+<!-- 								<input type="text" id="g_describe" class="form-control" -->
+<!-- 									placeholder="描述信息" name="g_describe" /> -->
+								<textarea rows="3" class=form-control placeholder="描述信息" name="g_describe" id="g_describe" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">关键信息</label>
+							<div class="col-sm-10">
+<!-- 								<input type="text" id="g_key" class="form-control" -->
+<!-- 									placeholder="关键信息" name="g_key" /> -->
+								<textarea rows="3" class=form-control placeholder="关键信息" name="g_key" id="g_key" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">失物类型</label>
+							<div class="col-sm-10">
+								<select id="g_type" class="form-control" name="g_type">
+									<option value="">--请选择--</option>
+									<option value="电子产品">电子产品</option>
+									<option value="贵重物品">贵重物品</option>
+									<option value="书籍">书籍</option>
+									<option value="证件">证件</option>
+									<option value="服饰">服饰</option>
+									<option value="其他">其他</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">失物状态</label>
+							<div class="col-sm-10"
+								th:if="${c_type == '寻物'}">
+								<select class="form-control" id="c_status" name="classification.c_status">
+									<option value="寻物中">寻物中</option>
+									<option value="已找回">已找回</option>
+								</select>
+							</div>
+							<div class="col-sm-10"
+								th:if="${c_type == '招领'}">
+								<select class="form-control" id="c_status" name="classification.c_status">
+									<option value="招领中">招领中</option>
+									<option value="已归还">已归还</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">失物图片</label>
+							<div class="col-sm-10">
+								<img id="picture" height="100px">
+							</div>				
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">上传图片</label>
+							<div class="col-sm-10">
+								<input type="file" class="form-control"
+									placeholder="上传图片" name="file" />
+							</div>
+							<input type="hidden" id="u_id" name="user.u_id">
+							<input type="hidden" id="g_id" name="g_id">
+							<input type="hidden" id="g_picture" name="g_picture">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary"
+						onclick="updateGoods()">修改物品</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/MyJavascript.js"></script>
+
+</body>
+</html>

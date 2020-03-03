@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>失物招领平台后台管理</title>
+
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+<!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+<style type="text/css">
+@media ( min-width : 768px) {
+	#slider_sub {
+		width: 220px;
+		position: absolute;
+		z-index: 1;
+		height: 600px;
+	}
+	.container_main {
+		margin-top: 55px;;
+		margin-left: 220px;
+	}
+}
+</style>
+</head>
+<body>
+	<!--导航条-->
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+					aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" th:href="@{index}">失物招领系统管理平台</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+
+				<form class="navbar-form navbar-left">
+					<div class="form-group" style="width: 300px;">
+						<input type="text" class="form-control" placeholder="Search"
+							style="width: 300px;">
+					</div>
+					<button type="submit" class="btn btn-default">搜索</button>
+				</form>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false"><span
+							class="glyphicon glyphicon-envelope"></span>&nbsp;申请信息&nbsp;<span
+							class="badge" style="background: #B92C28;">23</span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">有人想要 认领物品</a></li>
+							<li><a href="#">有人想要 归回物品</a></li>
+							<li><a href="#">有人想要 归回物品</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">更多信息</a></li>
+						</ul></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false"><span class="glyphicon glyphicon-user"></span>&nbsp;<span th:text="${session.USER_SESSION.username}"/>
+							<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">修改管理员信息</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">退出平台</a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container-fluid -->
+	</nav>
+	<!--侧边功能-->
+	<div class="navbar-default navbar-collapse" id="slider_sub">
+		<ul class="nav">
+			<li><a th:href="@{findUserBy(pageNum = 1)}" target="main"><span
+					class="glyphicon glyphicon-user"></span>&nbsp;用户管理</a></li>
+			<li><a href="#sub" data-toggle="collapse"><span
+					class="glyphicon glyphicon-th-large"></span>&nbsp;物品管理<span
+					class="glyphicon glyphicon glyphicon-chevron-left pull-right"></span></a></li>
+			<ul id="sub" class="nav collapse">
+				<li><a th:href="@{findGoodsByg_status(classification.c_type=寻物,pageNum = 1)}"
+					style="margin-left: 20px;" target="main">寻物管理</a></li><!--classification.c_type=寻物,-->
+				<li><a th:href="@{findGoodsByg_status(classification.c_type=招领,pageNum = 1)}"
+					style="margin-left: 20px;" target="main">招领管理</a></li><!--classification.c_type=招领,-->
+				<li><a th:href="@{/findApplyBy(pageNum = 1,user.username=null,goods.g_name=null,a_status=未审核)}" target="main" style="margin-left: 20px;">申请管理</a></li>
+			</ul>
+			<li><a th:href="@{findMessageBy(pageNum = 1,user.loginname=null,goods.g_name=null)}" target="main"><span
+					class="glyphicon glyphicon-menu-hamburger"></span>&nbsp;留言管理</a></li>
+			<li><a href="#" data-toggle="collapse"><span
+					class="glyphicon glyphicon-list-alt"></span>&nbsp;发布管理</a></li>
+		</ul>
+	</div>
+	<!--主页面-->
+
+	<div class="container-fluid container_main">
+		<div class="row">
+			<iframe th:src="@{findUserBy(pageNum = 1)}" name="main"  frameborder="0" scrolling="no" class="col-md-12" height="600px"></iframe>		
+		</div>
+	</div>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	
+
+</body>
+</html>

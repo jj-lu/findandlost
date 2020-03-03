@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.fkit.findandlost.repository.ApplyRepository">
+	<!--SQL片段 -->
+	<insert id="insertApply" parameterType="Apply" >
+		insert into tb_apply (
+		u_id,
+		g_id,
+		a_key,
+		a_status,
+		a_rtime
+		) 
+		values (
+		#{user.u_id},
+		#{goods.g_id},
+		#{a_key},
+		#{a_status},
+		#{a_rtime}
+		)
+	</insert>
+	
+	<resultMap type="Apply" id="ApplyResult">
+		<id property="a_id" column="a_id"/>
+<!-- 		<result property="g_id" column="g_id" /> -->
+		<result property="a_key" column="a_key" />
+		<result property="a_status" column="a_status" />
+		<association property="user" column="u_id" javaType="FLUser" 
+			select="org.fkit.findandlost.repository.UserRepository.findUserById">
+		</association>
+		<association property="goods" column="g_id" javaType="Goods"
+			select="org.fkit.findandlost.repository.GoodsRepository.findOnlyGoods">
+		</association>
+	</resultMap>
+	
+	<select id="findApplyById" parameterType="Integer" resultMap="ApplyResult">
+		select * from tb_apply where a_id = #{id}
+	</select>
+	
+<!-- 	<select id="findMessageByMid" parameterType="Integer" resultMap="MessageResult"> -->
+<!-- 		select * from tb_message where m_id = #{m_id} -->
+<!-- 	</select> -->
+	
+	<update id="updateApply" parameterType="Apply">
+		update tb_apply set a_rtime = #{a_rtime},a_key = #{a_key} where a_id = #{a_id}
+	</update>
+	
+	<update id="checkApply" parameterType="Apply">
+		update tb_apply set a_status = #{a_status} where a_id = #{a_id}
+	</update>
+	
+	<delete id="deleteApply" parameterType="Integer">
+		delete from tb_apply where a_id = #{id}
+	</delete>
+	
+	<select id="findApplyByUser" parameterType="Integer" resultMap="ApplyResult">
+		select * from tb_apply a join tb_user u on a.u_id = u.u_id where u.u_id = #{id}
+	</select>
+	
+<!-- 	也许可以做一个判断对象是否为空 -->
+	<select id="findApplyBy" parameterType="Apply" resultMap="ApplyResult">
+		select * from tb_apply a join tb_goods g on a.g_id = g.g_id join tb_user u on a.u_id = u.u_id
+		<where>
+			<if test="a_status != null and a_status != ''">
+				and a_status = #{a_status}
+			</if>
+			<if test="goods.g_name != null and goods.g_name != ''">
+				and g_name like concat ('%',#{goods.g_name},'%')
+			</if>
+			<if test="user.username != null and user.username != ''">
+				and username like concat ('%',#{user.username},'%')
+			</if>
+			<if test="user.u_id != null and user.u_id != ''">
+				and u.u_id = #{user.u_id}
+			</if>
+		</where>
+		order by a_rtime DESC
+	</select>
+	
+<!-- 	<select id="findApplyByUser" parameterType="Integer" resultMap="ApplyResult"> -->
+<!-- 		select * from tb_apply a 	 -->
+<!-- 	</select> -->
+</mapper>

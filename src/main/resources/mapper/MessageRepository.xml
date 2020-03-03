@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.fkit.findandlost.repository.MessageRepository">
+	<!--SQL片段 -->
+	<insert id="insertMessage" parameterType="Message" >
+		insert into tb_message (
+		message,
+		m_rtime,
+		u_id,
+		g_id
+		) 
+		values (
+		#{message},
+		#{m_rtime},
+		#{user.u_id},
+		#{g_id}
+		)
+	</insert>
+	
+	<resultMap type="Message" id="MessageResult">
+		<id property="m_id" column="m_id"/>
+		<result property="u_id" column="u_id"/>
+		<result property="g_id" column="g_id" />
+		<result property="message" column="message" />
+		<result property="m_rtime" column="m_rtime" />
+		<association property="user" column="u_id" javaType="FLUser" 
+			select="org.fkit.findandlost.repository.UserRepository.findUserById">
+		</association>
+		<association property="goods" column="g_id" javaType="Goods"
+			select="org.fkit.findandlost.repository.GoodsRepository.findOnlyGoods">
+		</association>
+	</resultMap>
+	
+	<select id="findMessageById" parameterType="Integer" resultMap="MessageResult">
+		select * from tb_message where g_id = #{g_id}
+	</select>
+	
+	<select id="findMessageByMid" parameterType="Integer" resultMap="MessageResult">
+		select * from tb_message where m_id = #{m_id}
+	</select>
+	
+	<update id="updateMessage" parameterType="Message">
+		update tb_message set message = #{message},m_rtime = #{m_rtime} where m_id = #{m_id}
+	</update>
+	
+	<delete id="deleteMessage" parameterType="Integer">
+		delete from tb_message where m_id = #{id}
+	</delete>
+	
+	
+	<select id="findMessageBy" parameterType="Message" resultMap="MessageResult">
+		select * from tb_message m join tb_goods g on m.g_id = g.g_id join tb_user u on m.u_id = u.u_id
+		<where>
+			<if test="goods.g_name != null and goods.g_name != ''">
+				and g_name like concat ('%',#{goods.g_name},'%')
+			</if>
+			<if test="user.loginname != null and user.loginname != ''">
+				and loginname like concat ('%',#{user.loginname},'%')
+			</if>
+			<if test="user.u_id != null and user.u_id != ''">
+				and u.u_id = #{user.u_id}
+			</if>
+		</where>
+		order by m_rtime DESC
+	</select>
+	
+	<select id="findMessageByUser" parameterType="Integer" resultMap="MessageResult">
+		select * from tb_message m join tb_user u on u.u_id = m.u_id where u.u_id = #{id}
+	</select>
+</mapper>

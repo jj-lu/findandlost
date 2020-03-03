@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.fkit.findandlost.repository.GoodsRepository">
+	<!--SQL片段 -->
+	<insert id="insertGoods" parameterType="Goods" keyProperty="id" useGeneratedKeys="true">
+		insert into tb_goods(
+		g_name,
+		g_type,
+		g_ltime,
+		g_place,
+		g_picture,
+		g_rtime,
+		g_title,
+		g_describe,
+		g_key,
+		u_id,
+		c_id)
+		values(
+		#{g_name},
+		#{g_type},
+		#{g_ltime},
+		#{g_place},
+		#{g_picture},
+		#{g_rtime},
+		#{g_title},
+		#{g_describe},
+		#{g_key},
+		#{user.u_id},
+		#{classification.c_id})
+	</insert>
+	
+	<delete id="deleteGoods" parameterType="Integer">
+		delete from tb_goods where g_id = #{id}
+	</delete>
+	
+	<update id="updateGoods" parameterType="Goods">
+			update tb_goods
+			set
+			g_name = #{g_name},
+			g_type = #{g_type},
+			g_ltime = #{g_ltime},
+			g_place = #{g_place},
+			g_picture = #{g_picture},
+			g_rtime = #{g_rtime},
+			g_title = #{g_title},
+			g_describe = #{g_describe},
+			g_key = #{g_key},
+			u_id = #{user.u_id},
+			c_id = #{classification.c_id}
+			where
+			g_id = #{g_id}
+	</update>
+	
+	<resultMap type="Goods" id="goodsResult">
+		<id property="g_id" column="g_id"/>
+		<result column = "g_name" property = "g_name"/>
+		<result column = "g_type" property = "g_type" />
+		<result column = "g_ltime" property = "g_ltime"/>
+		<result column = "g_title" property = "g_title" />		
+		<result column = "g_describe" property = "g_describe"/>
+		<result column = "g_key" property = "g_key"/>
+		<result column = "g_place" property = "g_place"/>
+		<result column = "g_rtime" property = "g_rtime"/>
+		<result column = "g_picture" property = "g_picture"/>
+		<association property="classification" column="c_id" javaType="Classification"
+			select="org.fkit.findandlost.repository.ClassificationRepository.findClassificationById">
+		</association>
+		<association property="user" column="u_id" javaType="FLUser" 
+			select="org.fkit.findandlost.repository.UserRepository.findUserById">
+		</association>
+		<collection property="message" column="g_id" ofType="Message" 
+			select="org.fkit.findandlost.repository.MessageRepository.findMessageById">
+		</collection>
+	</resultMap>
+	<select id="findGoodsById" resultMap="goodsResult">
+		select * from tb_goods where g_id = #{id}
+	</select>
+	
+	<resultMap type="Goods" id="onlyGoodsResult">
+		<id property="g_id" column="g_id"/>
+		<result column = "g_name" property = "g_name"/>
+		<result column = "g_type" property = "g_type" />
+		<result column = "g_ltime" property = "g_ltime"/>
+		<result column = "g_title" property = "g_title" />		
+		<result column = "g_describe" property = "g_describe"/>
+		<result column = "g_key" property = "g_key"/>
+		<result column = "g_place" property = "g_place"/>
+		<result column = "g_rtime" property = "g_rtime"/>
+		<result column = "g_picture" property = "g_picture"/>
+	</resultMap>
+	<select id="findOnlyGoods" resultMap="onlyGoodsResult">
+		select * from tb_goods where g_id = #{id}
+	</select>
+	
+	<select id="findGoodsByg_status" resultMap="goodsResult" parameterType="Goods">
+		select * from tb_goods g join tb_classification c on g.c_id = c.c_id 
+		<where>
+			<!-- 
+			<if test="g_status != null and g_status != ''">
+				and g_status like concat ('%',#{g_status},'%')
+				c_id = #{classification.c_id}
+			</if>
+			 -->
+<!-- 			<if test="user.u_id != null and user.u_id != ''"> -->
+<!-- 				and u.u_id = #{user.u_id} -->
+<!-- 			</if> -->
+			<if test="g_ltime != null">
+				and g_ltime = #{g_ltime}
+			</if>
+			<if test="classification.c_type != null and classification.c_type != ''">
+				and c_type = #{classification.c_type}
+			</if>
+			<if test="classification.c_status != null and classification.c_status != ''">
+				and c_status = #{classification.c_status}
+			</if>
+			<if test="g_name != null and g_name != ''">
+				and g_name like concat ('%',#{g_name},'%')
+			</if>
+			<if test="g_place != null and g_place != ''">
+				and g_place like concat ('%',#{g_place},'%')
+			</if>
+			<if test="g_type != null and g_type != ''">
+				and g_type = #{g_type}
+			</if>
+			<if test="g_id != null and g_id != ''">
+				and g_id = #{g_id}
+			</if>			
+		</where>
+		order by g_rtime DESC
+	</select>
+	
+	<select id="findGoodsByUser" parameterType="Integer" resultMap="goodsResult">
+		select * from tb_goods g join tb_user u on g.u_id = u.u_id where u.u_id = #{id}
+	</select>
+	
+
+</mapper>

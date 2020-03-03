@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.fkit.findandlost.repository.ClassificationRepository">
+	<!--SQL片段 -->
+	<select id="findC_id" parameterType="Classification" resultType="Integer">
+		select c_id from tb_classification
+		<where>
+			<if test="c_id != null and c_id != ''">
+				and c_id = #{c_id}
+			</if>
+			<if test="c_type != null and c_type != ''">
+				and c_type = #{c_type}
+			</if>
+			<if test="c_status != null and c_status != ''">
+				and c_status = #{c_status}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findClassificationById" parameterType="Integer" resultType="Classification">
+		select * from tb_classification where c_id = #{id}
+	</select>
+</mapper>

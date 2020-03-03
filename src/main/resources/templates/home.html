@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>失物管理平台</title>
+
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet"/>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/login.css" rel="stylesheet"/>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/MyJavascript.js"></script>
+<!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+<!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+	<style type="text/css">
+	/*@media (min-width: 768px) {
+	  .container {
+	    width: 650px;
+	  }
+	}
+	@media (min-width: 992px) {
+	  .container {
+	    width: 850px;
+	  }
+	}
+	@media (min-width: 1200px) {
+	  .container {
+	    width: 1000px;
+	  }
+	}*/
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		function find(){
+			$('html,body').animate({scrollTop:$('#message').offset().top},1000);
+		}
+		
+		window.onload = find;
+	</script>
+	<!--导航条-->
+	  <div class="top_menu">
+	    <div class="container-fluid"><span class="top_name">Tips： 德行的实现是由行为，不是由文字，请遵纪守法。</span>
+	      <div class="language"><img src="img/Chinese.gif" alt="中文版"></div>
+	    </div>
+	  </div>
+	<nav class="navbar navbar-default" style="margin-bottom: 0; background-color: deepskyblue">
+	  <div class="container">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <p class="logo_box"><a href="javascript:;"><img src="img/log.jpg" class="logo"/></a></p>
+	    </div>
+	
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="margin-left: 100px;">
+	      <ul class="nav navbar-nav">
+	         <li><a th:href="@{index}">首页 <span class="sr-only">(current)</span></a></li>     
+	        <li><a th:href="@{findGoods(classification.c_type=寻物,pageNum = 1)}">寻物 <span class="sr-only">(current)</span></a></li>
+	        <li><a th:href="@{findGoods(classification.c_type=招领,pageNum = 1)}">招领 <span class="sr-only">(current)</span></a></li>
+	        <li><a href="#">公告</a></li>
+	      </ul>
+	      <ul class="nav navbar-nav navbar-right">
+	        <li class="dropdown" th:if="${session.USER_SESSION == null}">
+	        	<a href="#">
+	        		<span class="glyphicon glyphicon-user"></span>
+	          		<span>未登录</span>
+	        	</a>
+	        </li>
+	        <li class="dropdown" th:if="${session.USER_SESSION != null}">	        	
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+	          	<span class="glyphicon glyphicon-user"></span>
+	          	<span th:text="${session.USER_SESSION.username}"></span>
+	          	<span class="caret"></span>
+	          </a>
+	          
+	          <ul class="dropdown-menu">
+	          	<input id="ids" th:value="${session.USER_SESSION.u_id}" type="hidden">
+	            <li><a href="#"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;我的认领</a></li>
+	            <li><a href="#"><span class="glyphicon glyphicon-export"></span>&nbsp;&nbsp;我的发布</a></li>
+	            <li><a href="#"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;个人信息</a></li>
+	            <li><a th:href="@{logout}"><span class="glyphicon glyphicon-off"></span>&nbsp;&nbsp;退出登录</a></li>
+	          </ul>
+	        </li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+	
+	<!--主页面-->
+		<div class="container">
+			<div class="row">
+				<h1>个人中心</h1>
+				<hr/>
+			</div>
+			<!--信息-->
+			<div class="row">
+			<!--tips-->
+			<div class="col-md-2">
+				<div class="panel panel-default">
+				  <div class="panel-heading"><h4>栏目导航</h4></div>
+				  <div class="div1">
+				    <ul>
+						<li><a href="#person">个人信息</a></li>
+						<li><a href="#release">我的发布</a></li>
+						<li><a href="#apply">我的认领</a></li>
+						<li><a href="#message">我的留言</a></li>
+						</ul>
+				  </div>
+				</div>
+				
+			</div>
+
+			<div class="col-md-10">
+				<div class="panel panel-default">
+				  <div class="panel-title-red panel-heading" id="person"><h3><span class="glyphicon glyphicon-home"></span>&nbsp;个人信息</h3></div>
+				  <div class="panel-body">
+				  <table style="font-size: 16px;">
+				   	<tr style="margin-bottom: 20px;">
+				   		<td width="80px"><b>登&nbsp;&nbsp;录&nbsp;&nbsp;名：</b></td>
+				   		<td width="300px"><span th:text="${user.loginname}"></span></td>
+				   		<td width="80px"><b>用&nbsp;&nbsp;户&nbsp;&nbsp;名：</b></td>
+				   		<td width="300px"><span th:text="${user.username}"></span> </td>
+				   	</tr>
+				   	<tr>
+				   		<td colspan="2"><hr width="50%" align="left"></td>
+				   		<td colspan="2"><hr width="50%" align="left"></td>
+				   	</tr>
+				   	<tr>
+				   		<td width="70px"><b>电子邮箱：</b></td>
+				   		<td width="300px"><span th:text="${user.email}"></span></td>
+				   		<td width="70px"><b>联系电话：</b></td>
+				   		<td width="300px"><span th:text="${user.phone}"></span></td>
+				   	</tr>
+				   	<tr>
+				   		<td colspan="2"><hr width="50%" align="left"></td>
+				   		<td colspan="2"><hr width="50%" align="left"></td>
+				   	</tr>
+				   	<tr>
+				   		<td width="70px"><b>QQ&nbsp;&nbsp;账号：</b></td>
+				   		<td width="300px"><span th:text="${user.qq}"></span></td>
+				   		<td width="70px"><b>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</b></td>
+				   		<td width="300px"><span th:text="${user.sex}"></span></td>
+				   	</tr>
+				   	<tr>
+				   		<td colspan="2"><hr width="50%" align="left"></td>
+				   		<td colspan="2"><hr width="50%" align="left"></td>
+				   	</tr>
+				   	<tr>
+				   		<td width="70px"><b>身&nbsp;&nbsp;份&nbsp;&nbsp;证：</b></td>
+				   		<td width="300px"><span th:text="${user.idcard}"></span></td>
+				   		<td width="70px"><b>班&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</b></td>
+				   		<td width="300px"><span th:text="${user.clazz}"></span></td>
+				   	</tr>
+				   	<tr>
+				   		<td colspan="2"><hr width="50%" align="left"></td>
+				   		<td colspan="2"><hr width="50%" align="left"></td>
+				   	</tr>
+				   	<tr>
+				   		<td colspan="4" align="center"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editUserDialog" th:onclick="|editUser(${user.u_id})|"><span class="glyphicon glyphicon-wrench"></span>&nbsp;修改个人信息</button></td>
+				   	</tr>
+				   </table>
+				   
+				  </div>
+				</div>
+				
+				<div class="panel panel-default">
+				  <div class="panel-heading panel-title-red" id="release"><h3><span class="glyphicon glyphicon-export"></span>&nbsp;我的发布</h3></div>
+				  <div class="panel-body">
+				  		<ul class="list-group">
+						  <li class="list-group-item td16px">
+						  	 <table>
+							   	 <tr style="text-align: center; ">
+							   	 	<b><td width="180px"><b>物品图片</b></td><td width="300px"><b>发布标题</b></td><td width="200px"><b>发布时间</b></td></b>
+							   	 </tr>
+							   </table>
+						  </li>
+						</ul>
+				    <ul class="list-group" th:each="goods : ${goodses}">
+						  <li class="list-group-item td16px">
+						  	 <table>
+							   	 <tr style="text-align: center;">
+							   	 	<td width="180px" rowspan="2"><a th:href="@{detail(id = ${goods.g_id})}" style="text-decoration: none;"><img th:src="${'img/'+goods.g_picture}" border="0" class="img-responsive"></td><td width="300px" th:text="${goods.g_title}" style="padding-left: 30px"></a>希望你早日找回物品</td><td width="200px" th:text="${goods.g_rtime}">2019-12-24 21:03:48</td>
+							   	 </tr>
+							   	 <tr style="text-align: center;">
+							   	 	
+							   	 	<td width="430px" style="padding-left: 30px"><cite th:text="${goods.classification.c_status}+'...'" style="font-size: 20px;color: blue;"></cite></td>
+							   	 	<td width="200px">
+							   	 		<div class="btn-group" role="group">
+							   	 			<button type="button" class="btn btn-success btn-radius" title="详情" ><a th:href="@{detail(id = ${goods.g_id})}" style="text-decoration: none;"><span class="glyphicon glyphicon-zoom-in"></span></a></button>
+  											<button type="button" class="btn btn-primary btn-radius" title="修改" data-toggle="modal" data-target="#editGoodsDialog"
+													th:onclick="|editGoods(${goods.g_id})|"><span class="glyphicon glyphicon-pencil"></span></button>
+  											<button type="button" class="btn btn-danger btn-radius" title="删除" th:onclick="|deleteGoods(${goods.g_id})|"><span class="glyphicon glyphicon-folder-close"></span></button>
+							   	 		</div>
+							   	 	</td>
+							   	 </tr>
+							   </table>
+						  </li>
+						</ul>
+						
+				   
+				  </div>
+				</div>
+				
+				<div class="panel panel-default">
+				  <div class="panel-heading panel-title-red" id="apply"><h3><span class="glyphicon glyphicon-th-list"></span>&nbsp;我的认领</h3></div>
+				  <div class="panel-body">
+				  		<ul class="list-group">
+						  <li class="list-group-item td16px">
+						  	 <table>
+							   	 <tr style="text-align: center; ">
+							   	 	<b><td width="180px"><b>物品名称</b></td><td width="300px"><b>申领资料</b></td><td width="200px"><b>申领时间</b></td></b>
+							   	 </tr>
+							   </table>
+						  </li>
+						</ul>
+				   <ul class="list-group" th:each="apply:${applyes}">
+						  <li class="list-group-item td16px">
+						  	 <table>
+							   	 <tr style="text-align: center;">
+							   	 	<td width="180px" th:text="${apply.goods.g_name}"></td><td width="450px" th:text="${apply.a_key}">希望你早日找回物品</td><td width="200px" th:text="${apply.a_rtime}"></td>
+							   	 </tr>
+							   	 <tr style="text-align: center;">
+							   	 	<td width="180px"></td>
+							   	 	<td width="430px"><cite th:text="${apply.a_status}+'...'" style="font-size: 20px;color: blue;"></cite></td>
+							   	 	<td width="200px">
+							   	 		<div class="btn-group" role="group">
+							   	 			<button type="button" class="btn btn-success btn-radius" title="详情" data-toggle="modal" data-target="#ApplyDialog" th:onclick="|dataApply(${apply.a_id})|"><span class="glyphicon glyphicon-zoom-in"></span></button>
+  											<button type="button" class="btn btn-primary btn-radius" title="修改" data-toggle="modal" data-target="#editApplyDialog" th:onclick="|editApply(${apply.a_id})|"><span class="glyphicon glyphicon-pencil"></span></button>
+  											<button type="button" class="btn btn-danger btn-radius" title="删除" th:onclick="|deleteApply(${apply.a_id})|"><span class="glyphicon glyphicon-folder-close"></span></button>
+							   	 		</div>
+							   	 	</td>
+							   	 </tr>
+							   </table>
+						  </li>
+						</ul>
+						
+				   
+				  </div>
+				</div>
+				
+				<div class="panel panel-default">
+				  <div class="panel-heading panel-title-red" id="message"><h3><span class="glyphicon glyphicon-envelope"></span>&nbsp;我的留言</h3></div>
+				  <div class="panel-body">
+				  		<ul class="list-group">
+						  <li class="list-group-item td16px">
+						  	 <table>
+							   	 <tr style="text-align: center; ">
+							   	 	<b><td width="180px"><b>物品名称</b></td><td width="300px"><b>留言信息</b></td><td width="200px"><b>留言时间</b></td></b>
+							   	 </tr>
+							   </table>
+						  </li>
+						</ul>
+				   	<ul class="list-group" th:each="message : ${messages}">
+						  <li class="list-group-item td16px">
+						  	 <table>
+							   	 <tr style="text-align: center;">
+							   	 	<td width="180px" th:text="${message.goods.g_name}">管理员：</td><td width="450px" th:text="${message.message}">希望你早日找回物品</td><td width="200px" th:text="${message.m_rtime}"></td>
+							   	 </tr>
+							   	 <tr style="text-align: center;">
+							   	 	<td width="180px"></td><td width="430px"></td>
+							   	 	<td width="200px">
+							   	 		<div class="btn-group" role="group">
+  											<button type="button" class="btn btn-primary btn-radius" title="修改"  th:onclick="|replyMessage(${message.m_id})|" data-target="#editMessageDialog" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span></button>
+  											<button type="button" class="btn btn-danger btn-radius" title="删除" th:onclick="|deleteMessage(${message.m_id})|"><span class="glyphicon glyphicon-folder-close"></span></button>
+							   	 		</div>
+							   	 	</td>
+							   	 </tr>
+							   </table>
+						  </li>
+						</ul>
+				   
+				  </div>
+				</div>
+				
+				
+				
+			</div>
+						</div>
+			</div>
+	    
+	  
+	
+						
+	
+	
+  
+  	
+  
+	<!--联系我们-->
+	<div class="container">
+	<div class="row">
+	<div class="col-xs-12 col-sm-4 col-md-5">
+      <div class="index_contact">
+        <h1 class="title_h1">联系我们</h1>
+        <span class="title_span">CONTACT US</span>
+        <p style="padding-top:20px;">联系人：JJ</p>
+        <p>传真：86211818</p>
+        <p>电话：0769-86211777</p>
+        <p>邮箱：zsgdst@126.com</p>
+        <p>地址：广东省东莞市南城区西湖路99号</p>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-8 col-md-7">
+      <div class="news_box">
+        <h1 class="title_h1">友情链接</h1>
+        <span class="title_span">FRIENDLY LINK</span>
+        <ul class="index_news">
+          <li><a target="_blank" href="">官方官网</a><a target="_blank" href="https://www.diunal.com/">丢哪了</a><a target="_blank" href="https://tieba.baidu.com/f?ie=utf-8&kw=%E5%A4%B1%E7%89%A9%E6%8B%9B%E9%A2%86&traceid=">招领贴吧</a></li>
+          <li><a target="_blank" href="http://gdga.gd.gov.cn/">广东公安</a><a target="_blank" href="https://www.163yun.com/">网易云</a><a target="_blank" href="http://www.mmissing.com/indexsubfile/classceshi.html">米西寻找</a></li>
+          <li><a target="_blank" href="https://map.baidu.com/@12666864,2615378,12.91z">百度地图</a><a target="_blank" href="https://cloud.tencent.com/">腾讯云</a><a target="_blank" href="http://www.cswzl.com/">中国失物招领</a></li>
+          <li><a target="_blank" href="https://www.xianren.net/#page2">闲人网络</a><a target="_blank" href="https://www.aliyun.com/?utm_content=se_1000301881">阿里云</a><a target="_blank" href="http://www.gdust.cn/">广东科技学院</a></li>
+         
+        </ul>
+      </div>
+    </div>	
+    </div>
+	</div>
+	</div>
+	
+	<!--尾部-->
+	<footer>
+		<div class="container-fluid">
+		  <div class="copyright">
+		    <p>CopyRight 2019 All Right Reserved &nbsp;ICP:873468834<a href="javascript:;" target="_blank">网站地图</a></p>
+		    <p class="copyright_p">地址：广东省东莞市南城区西湖路99号 &nbsp;电话：0769-86211777 &nbsp;传真：86211818&nbsp;</p>
+		  </div>
+  	</div>
+	</footer>
+	
+	<!--发布与返回-->
+	<a href="#" data-toggle="modal"><div class="son1" onclick="setStatus('寻物中')">丢失物品</div></a>
+	<a href="#" data-toggle="modal"><div class="son2" onclick="setStatus('招领中')">找到物品</div></a>
+	<a href="#top"><div class="son3">回返顶部</div></a>
+	
+	
+	<!--修改客户模态框-->
+	<div class="modal fade" id="editUserDialog" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">修改用户信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="edit_user_form">
+						<div class="form-group">
+							<label class="col-sm-2 control-label"> 登录名 </label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_loginname" class="form-control"
+									placeholder="登录名" name="loginname" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">用户名</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_username" class="form-control"
+									placeholder="用户名" name="username" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">登录密码</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_password" class="form-control"
+									placeholder="登录密码" name="password" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">电子邮箱</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_email" class="form-control"
+									placeholder="电子邮箱" name="email" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">联系电话</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_phone" class="form-control"
+									placeholder="联系电话" name="phone" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">QQ</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_qq" class="form-control"
+									placeholder="QQ" name="qq" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">性别</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="edit_sex" name="sex">
+									<option value="">--请选择--</option>
+									<option value="男">男</option>
+									<option value="女">女</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">身份证</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_idcard" class="form-control"
+									placeholder="身份证号码" name="idcard" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">班级</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_clazz" class="form-control"
+									placeholder="班级" name="clazz" />
+							</div>
+						</div>
+							<input type="hidden" id="edit_role" name="role" />
+							<input type="hidden" id="id" name="u_id" />
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary"
+						onclick="updateUser()">修改客户</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--新建物品模态框-->
+	<div class="modal fade" id="newGoodsDialog" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">新建失物信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="new_goods_form">
+						<div class="form-group">
+							<label class="col-sm-2 control-label"> 失物名称 </label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" placeholder="失物名称"
+									name="g_name" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">丢失时间</label>
+							<div class="col-sm-10">
+								<input type="date" class="form-control" placeholder="丢失时间"
+									name="g_ltime" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">丢失地点</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" placeholder="丢失地点"
+									name="g_place" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">失物标题</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" placeholder="失物标题"
+									name="g_title" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">描述信息</label>
+							<div class="col-sm-10">
+								<textarea rows="3" class=form-control placeholder="描述信息" name="g_describe" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">关键信息</label>
+							<div class="col-sm-10">
+								<textarea rows="3" class=form-control placeholder="关键信息" name="g_key" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">失物类型</label>
+							<div class="col-sm-10">
+								<select class="form-control" name="g_type">
+									<option value="" selected="selected">---失物类型---</option>
+									<option value="电子产品">电子产品</option>
+									<option value="贵重物品">贵重物品</option>
+									<option value="书籍">书籍</option>
+									<option value="证件">证件</option>
+									<option value="服饰">服饰</option>
+									<option value="其他">其他</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">失物状态</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="c_status" name="classification.c_status">
+									<option value="寻物中">寻物中</option>
+									<option value="招领中">招领中</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">上传图片</label>
+							<div class="col-sm-10">
+								<input type="file" class="form-control" placeholder="上传图片"
+									name="file" />
+							</div>
+							<input type="hidden" name="user.u_id" id="u_id">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary"
+						onclick="createGoods()">添加失物</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<!--修改物品模态框-->
+	<div class="modal fade" id="editMessageDialog" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">修改留言信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="edit_message_form">
+						<div class="form-group">
+							<b><h4 align="center">留言信息</h4></b>
+							<div class="col-sm-12">
+								<textarea class="form-control" rows="5" style="resize: none;" name="message" id="oldMessage"></textarea>
+								<input type="hidden" id="m_id" name="m_id">
+							</div>
+						</div>
+					</form>
+				</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary"
+							onclick="updateMessage()">修改留言</button>
+					</div>
+			</div>
+		</div>
+	</div>
+	<!--修改物品模态框-->
+	<div class="modal fade" id="editGoodsDialog" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">修改发布信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="edit_goods_form">
+						<div class="form-group">
+							<label class="col-sm-2 control-label"> 失物名称 </label>
+							<div class="col-sm-10">
+								<input type="text" id="g_name" class="form-control"
+									placeholder="失物名称" name="g_name" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">丢失时间</label>
+							<div class="col-sm-10">
+								<input type="date" id="g_ltime" class="form-control"
+									placeholder="丢失时间" name="g_ltime" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">丢失地点</label>
+
+							<div class="col-sm-10">
+								<input type="text" id="g_place" class="form-control"
+									placeholder="丢失地点" name="g_place" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">失物标题</label>
+							<div class="col-sm-10">
+								<input type="text" id="g_title" class="form-control"
+									placeholder="失物标题" name="g_title" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">描述信息</label>
+							<div class="col-sm-10">
+<!-- 								<input type="text" id="g_describe" class="form-control" -->
+<!-- 									placeholder="描述信息" name="g_describe" /> -->
+								<textarea rows="3" class=form-control placeholder="描述信息" name="g_describe" id="g_describe" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">关键信息</label>
+							<div class="col-sm-10">
+<!-- 								<input type="text" id="g_key" class="form-control" -->
+<!-- 									placeholder="关键信息" name="g_key" /> -->
+								<textarea rows="3" class=form-control placeholder="关键信息" name="g_key" id="g_key" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">失物类型</label>
+							<div class="col-sm-10">
+								<select id="g_type" class="form-control" name="g_type">
+									<option value="">--请选择--</option>
+									<option value="电子产品">电子产品</option>
+									<option value="贵重物品">贵重物品</option>
+									<option value="书籍">书籍</option>
+									<option value="证件">证件</option>
+									<option value="服饰">服饰</option>
+									<option value="其他">其他</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">失物图片</label>
+							<div class="col-sm-10">
+								<img id="picture" height="100px">
+							</div>				
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">上传图片</label>
+							<div class="col-sm-10">
+								<input type="file" class="form-control"
+									placeholder="上传图片" name="file" />
+							</div>
+							<input type="hidden" id="u_id" name="user.u_id">
+							<input type="hidden" id="g_id" name="g_id">
+							<input type="hidden" id="g_picture" name="g_picture">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary"
+						onclick="updateGoods()">修改物品</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 修改申请模态框 -->
+	<div class="modal fade" id="editApplyDialog" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">审核申请</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="edit_apply_form">
+						<div class="form-group">
+							<div class="col-sm-5"></div>
+							<label class="col-sm-2 control-label"> 物品信息 </label><br />
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">物品名称</label>
+							<div class="col-sm-10">
+								<input type="text" id="applyg_name" class="form-control" name="goods.g_name" disabled="disabled" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">失物图片</label>
+							<div class="col-sm-10">
+								<img id="applyg_picture" name="goods.g_picture" height="100px">
+							</div>				
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">关键信息</label>
+							<div class="col-sm-10">
+								<textarea id="applyg_key" disabled="disabled" class="form-control" rows="3" name="goods.g_key" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<hr />
+						<div class="form-group">
+							<div class="col-sm-5"></div>
+							<label class="col-sm-2 control-label"> 申请信息 </label><br />
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">申请人</label>
+							<div class="col-sm-10">
+								<input type="text" id="username" class="form-control" name="user.username" disabled="disabled" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">申请时间</label>
+							<div class="col-sm-10">
+								<input type="text" id="a_rtime" class="form-control" name="a_rtime" disabled="disabled" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">关键信息</label>
+							<div class="col-sm-10">
+								<textarea id="a_key" class="form-control" rows="3" placeholder="物品关键信息" name="a_key" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">审核状态</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="a_status" name="a_status" disabled="disabled">
+									<option value="未审核">未审核</option>
+									<option value="未通过">未通过</option>
+									<option value="已通过">已通过</option>
+								</select>
+							</div>
+							<input type="hidden" id="a_id" name="a_id">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary"
+						onclick="updateApply()">修改申请信息</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<!-- 	申请详细信息 -->
+	<div class="modal fade" id="ApplyDialog" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">申请详细资料</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="apply_form">
+						<div class="form-group">
+							<div class="col-sm-5"></div>
+							<label class="col-sm-2 control-label"> 申请信息 </label><br />
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">申请人</label>
+							<div class="col-sm-10">
+								<input type="text" id="datausername" class="form-control" name="user.username" disabled="disabled" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">申请时间</label>
+							<div class="col-sm-10">
+								<input type="text" id="dataa_rtime" class="form-control" name="a_rtime" disabled="disabled" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">关键信息</label>
+							<div class="col-sm-10">
+								<textarea disabled="disabled" id="dataa_key" class="form-control" rows="3" placeholder="物品关键信息" name="a_key" style="resize: none;"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">审核状态</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="dataa_status" name="a_status" disabled="disabled">
+									<option value="未审核">未审核</option>
+									<option value="未通过">未通过</option>
+									<option value="已通过">已通过</option>
+								</select>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">					
+					<button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

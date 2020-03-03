@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.fkit.findandlost.repository.UserRepository">
+	<!--SQL片段 -->
+	<select id="findU_id" parameterType="FLUser" resultType="Integer">
+		select u_id from tb_user where username = #{username}
+	</select>
+	
+	<insert id="insertUser" parameterType="FLUser">
+		insert into tb_user(
+		loginname,
+		username,
+		password,
+		email,
+		phone,
+		qq,
+		idcard,
+		sex,
+		clazz
+		)
+		values(
+		#{loginname},
+		#{username},
+		#{password},
+		#{email},
+		#{phone},
+		#{qq},
+		#{idcard},
+		#{sex},
+		#{clazz}
+		)
+	</insert>
+	
+	<delete id="deleteUser" parameterType="Integer">
+		delete from tb_user
+		where u_id=#{id}
+	</delete>
+	
+	<update id="updateUser" parameterType="FLUser">
+		update tb_user
+		<set>
+			<if test="loginname!=null">
+				loginname=#{loginname},
+			</if>
+			<if test="username!=null">
+				username=#{username},
+			</if>
+			<if test="password!=null">
+				password=#{password},
+			</if>
+			<if test="email!=null">
+				email=#{email},
+			</if>
+			<if test="phone!=null">
+				phone=#{phone},
+			</if>
+			<if test="qq!=null">
+				qq=#{qq},
+			</if>
+			<if test="idcard!=null">
+				idcard=#{idcard},
+			</if>
+			<if test="sex!=null">
+				sex=#{sex},
+			</if>
+			<if test="clazz!=null">
+				clazz=#{clazz},
+			</if>
+		</set>
+		where u_id=#{u_id}
+	</update>
+	
+	
+<!-- 	<select id="findUser" resultMap="userResult"> -->
+<!-- 		select * from tb_user -->
+<!-- 	</select> -->
+	<resultMap type="FLUser" id="userResult">
+		<id property="u_id" column="u_id"/>
+		<result column = "loginname" property = "loginname"/>
+		<result column = "username" property = "username"/>
+		<result column = "password" property = "password"/>
+		<result column = "email" property = "email"/>
+		<result column = "phone" property = "phone"/>
+		<result column = "qq" property = "qq"/>
+		<result column = "idcard" property = "idcard"/>
+		<result column = "sex" property = "sex"/>
+		<result column = "clazz" property = "clazz"/>
+		<result column = "role" property = "role"/>
+	</resultMap>
+	
+	<select id="findUserById" parameterType="Integer" resultMap="userResult">
+		select * from tb_user where u_id = #{id}
+	</select>
+	
+	
+	<select id="findUserBy" parameterType="FLUser" resultMap="userResult">
+		select * from tb_user
+		<where>
+			<if test="u_id != null and u_id != ''">
+				and u_id = #{u_id}
+			</if>
+			<if test="username != null and username != ''">
+				and username like concat ('%',#{username},'%')
+			</if>
+			<if test="clazz != null and clazz != ''">
+				and clazz like concat ('%',#{clazz},'%')
+			</if>
+			<if test="sex != null and sex != ''">
+				and sex = #{sex}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findUserByLogin" parameterType="String" resultMap="userResult">
+		select * from tb_user where loginname = #{loginname} and password = #{password}
+	</select>
+	
+<!-- 	<resultMap type="FLUser" id="userALLResult"> -->
+<!-- 		<id property="u_id" column="u_id"/> -->
+<!-- 		<result column = "loginname" property = "loginname"/> -->
+<!-- 		<result column = "username" property = "username"/> -->
+<!-- 		<result column = "password" property = "password"/> -->
+<!-- 		<result column = "email" property = "email"/> -->
+<!-- 		<result column = "phone" property = "phone"/> -->
+<!-- 		<result column = "qq" property = "qq"/> -->
+<!-- 		<result column = "idcard" property = "idcard"/> -->
+<!-- 		<result column = "sex" property = "sex"/> -->
+<!-- 		<result column = "clazz" property = "clazz"/> -->
+<!-- 		<result column = "role" property = "role"/> -->
+<!-- 		<collection property="goodses" ofType="Goods" column="g.g_id" select="org.fkit.findandlost.repository.GoodsRepository.findOnlyGoods"></collection> -->
+<!-- 	</resultMap> -->
+<!-- 	<select id="findUserAll" parameterType="Integer" resultMap="userALLResult"> -->
+<!-- 		select * from tb_user u  where u.u_id = #{id} -->
+<!-- 	</select> -->
+</mapper>
