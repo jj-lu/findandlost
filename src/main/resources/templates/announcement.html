@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>失物管理平台</title>
+
+<!-- Bootstrap -->
+<link href="css/bootstrap.min.css" rel="stylesheet"/>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/login.css" rel="stylesheet"/>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/MyJavascript.js"></script>
+<script src="js/echarts.js"></script>
+<!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+<!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+<!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+	<div th:replace="mycode :: mytop"></div>
+	<div style="background-color: deepskyblue">
+		<div class="container">
+		<div class="row" style="margin-top: 5px;">
+        <div class="col-md-12">
+            <div id="goodstype" style="height: 500px; border: 1px solid gray; background-color: white"></div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 5px;">
+        <div class="col-md-12">
+            <div id="recentcharts" style="height: 500px; border: 1px solid gray; background-color: white"></div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 5px;">
+        <div class="col-md-12">
+            <div id="findcharts" style="height: 500px; border: 1px solid gray; background-color: white"></div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 5px; margin-bottom: 5px">
+        <div class="col-md-12">
+            <div id="returncharts" style="height: 500px; border: 1px solid gray; background-color: white"></div>
+        </div>
+    </div>
+    
+    
+	</div>
+	</div>
+  <div class="container">
+  	<div th:replace="mycode :: myLink"></div>
+  </div>
+	
+<div th:replace="mycode :: myfoot"></div>
+<script>
+$(function () {
+	$.get("GoodsData", {}, function (resp) {
+		//填充失物类型柱状图
+		fillToGoodsType(resp.losttotal);
+		//填充近一周失物情况折线图
+		fillToGoodsRecent(resp.recentLost);
+		//填充寻物成功的饼状图
+		fillToFindSuccess(resp.findDatas);
+		//填充归还成功的饼状图
+		fillToReturnSuccess(resp.returnDatas);
+	});
+	var fillToReturnSuccess = function(returns){
+		//console.log(returns);
+		var array = [];
+		var name = [];
+		$.each(returns,function(index,re){
+			name.push(re.c_status);
+			var obj = new Object();
+			obj.name = re.c_status;
+			obj.value = re.count;
+			array.push(obj);
+		});
+		var myCharts = echarts.init($("#returncharts").get(0));
+		var option = {
+				title: {
+					text: "归还成功数据可视化"
+				},
+				legend: {
+					// orient 设置布局方式，默认水平布局，可选值：'horizontal'（水平） ¦ 'vertical'（垂直）
+					 orient: 'vertical',
+					// x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+					 x: 'left',
+					// y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+			         y: 'center',
+			         data: name
+				},
+				series : [
+			        {
+			            name: '比例图',
+			            type: 'pie',    // 设置图表类型为饼图
+			            radius: '75%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+			            data:array,
+					    label: {
+					    	normal: {
+					    		// 设置标签位置，默认在饼状图外 可选值：'outer' ¦ 'inner（饼状图上）'
+					    		position: "inner",
+					    		// formatter: '{a} {b} : {c}个 ({d}%)'   设置标签显示内容 ，默认显示{b}
+				                // {a}指series.name  {b}指series.data的name
+				                // {c}指series.data的value  {d}%指这一部分占总数的百分比
+					    		formatter: "{b}:{d}%"
+					    	}
+					    }
+			        },
+			    ]
+		};
+		myCharts.setOption(option);
+	}
+	var fillToFindSuccess = function(finds){
+		//console.log(finds);
+		var array = [];
+		var name = [];
+		$.each(finds, function(index,find){
+			//console.log(find.count);
+			name.push(find.c_status);
+			var obj = new Object();
+			obj.name = find.c_status;
+			obj.value = find.count;
+			array.push(obj);
+		});
+		var myCharts = echarts.init($("#findcharts").get(0));
+		var option = {
+				title: {
+					text: "寻物成功数据可视化"
+				},
+				legend: {
+					// orient 设置布局方式，默认水平布局，可选值：'horizontal'（水平） ¦ 'vertical'（垂直）
+					 orient: 'vertical',
+					// x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+					 x: 'left',
+					// y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+			         y: 'center',
+			         data: name
+				},
+				series : [
+			        {
+			            name: '比例图',
+			            type: 'pie',    // 设置图表类型为饼图
+			            radius: '75%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+			            data:array,
+					    label: {
+					    	normal: {
+					    		// 设置标签位置，默认在饼状图外 可选值：'outer' ¦ 'inner（饼状图上）'
+					    		position: "inner",
+					    		// formatter: '{a} {b} : {c}个 ({d}%)'   设置标签显示内容 ，默认显示{b}
+				                // {a}指series.name  {b}指series.data的name
+				                // {c}指series.data的value  {d}%指这一部分占总数的百分比
+					    		formatter: "{b}:{d}%"
+					    	}
+					    }
+			        },
+			    ]
+		};
+		myCharts.setOption(option);
+	}
+	var fillToGoodsRecent = function(losts){
+		var date = [];
+		var count = [];
+		$.each(losts, function(index,losts){
+			date.push(losts.g_ltime);
+			count.push(losts.count);
+		});
+
+		var myCharts = echarts.init($("#recentcharts").get(0));
+		var option = {
+				title: {
+	                text: "近一周发布失物情况"
+	            },
+	            grid: {
+	                show: true
+	            },
+	            legend: {
+	                data: ["丢失物品"]
+	            },
+	            tooltip: {},
+	            xAxis: {
+	            	type: 'category',
+	                data: date
+	            },
+	            yAxis: {},
+	            series: [{
+	                type: 'line',
+	                name: '丢失物品',
+	                data: count
+	            }]
+		};
+		myCharts.setOption(option);
+	};
+	var fillToGoodsType = function(goodsTypes){
+		var type = [];
+		var count = [];
+		$.each(goodsTypes, function(index,goodsType){
+			type.push(goodsType.g_type);
+			count.push(goodsType.count);
+		});
+
+		var myCharts = echarts.init($("#goodstype").get(0));
+		var option = {
+				title: {
+	                text: "容易丢失物品的类型"
+	            },
+	            grid: {
+	                show: true
+	            },
+	            legend: {
+	                data: ["丢失物品"]
+	            },
+	            tooltip: {},
+	            xAxis: {
+	                data: type
+	            },
+	            yAxis: {},
+	            series: [{
+	                type: 'bar',
+	                name: '丢失物品',
+	                data: count
+	            }]
+		};
+		myCharts.setOption(option);
+	};
+		
+});
+</script>
+</body>
+</html>
