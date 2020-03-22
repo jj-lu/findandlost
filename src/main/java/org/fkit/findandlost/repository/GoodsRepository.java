@@ -3,6 +3,9 @@ package org.fkit.findandlost.repository;
 import java.util.List;
 
 import org.fkit.findandlost.bean.Goods;
+import org.fkit.findandlost.bean.GoodsSuccess;
+import org.fkit.findandlost.bean.GoodsType;
+import org.fkit.findandlost.bean.RecentCount;
 
 import com.github.pagehelper.Page;
 
@@ -72,4 +75,25 @@ public interface GoodsRepository {
 	public Page<Goods> findGoodsByg_status(Goods goods);
 	
 	public List<Goods> findGoodsByUser(int id);
+	
+	/**
+	 * 统计各种物品类型的数量
+	 * @param g_type
+	 * @return
+	 */
+	public List<GoodsType> statisticsGoodsType(String g_type);
+	
+	/**
+	 * 统计成功寻物的百分比
+	 * @param c_type
+	 * @return
+	 */
+	public List<GoodsSuccess> statisticsGoodsSuccess(String c_type);
+	
+	/**
+	 * 统计近七天的丢失物品的数量
+	 * @param g_ltime
+	 * @return
+	 */
+	public List<RecentCount> statisticsRecentCount(String c_type);
 }

@@ -9,6 +9,7 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 
 import org.fkit.findandlost.bean.Goods;
+import org.fkit.findandlost.bean.GoodsData;
 import org.fkit.findandlost.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -28,12 +29,26 @@ public class GoodsController {
 	@Autowired
 	private GoodsService goodsService;
 	
+	
 	@RequestMapping("/findGoodsById")
 	@ResponseBody
 	public Goods findGoodsById(int id){
 		Goods goods = goodsService.findGoodsById(id);
 		System.out.println(goods);
 		return goods;
+	}
+	
+	/**
+	 * 公告页面的图表数据
+	 * @return
+	 */
+	@RequestMapping("/GoodsData")
+    @ResponseBody
+	public GoodsData GoodsData() {
+		//System.out.println("goodsData");
+		GoodsData gt = goodsService.getGoodsData();
+		//System.out.println(gt.getLostTotal().isEmpty());
+		return gt;
 	}
 	
 	@RequestMapping("/findGoodsByg_status")

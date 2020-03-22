@@ -16,90 +16,20 @@
 <script src="js/MyJavascript.js"></script>
 <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
 <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
-<!--[if lt IE 9]>
-      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
-    <![endif]-->
-	<style type="text/css">
-	/*@media (min-width: 768px) {
-	  .container {
-	    width: 650px;
-	  }
-	}
-	@media (min-width: 992px) {
-	  .container {
-	    width: 850px;
-	  }
-	}
-	@media (min-width: 1200px) {
-	  .container {
-	    width: 1000px;
-	  }
-	}*/
-	</style>
+<!--[if lt IE 9]-->
+	<script src="js/html5shiv.js"></script>
+	<script src="js/respond.js"></script>
+<!-- [endif]-->	
 </head>
 <body>
-	<script type="text/javascript">
-		function find(){
-			$('html,body').animate({scrollTop:$('#message').offset().top},1000);
-		}
-		
-		window.onload = find;
-	</script>
+<script type="text/javascript">
+// 	var tplVal = $("#move").text;
+// 	$(function(){
+// 		$('html,body').animate({scrollTop:$("#"+tplVal).offset().top},1000);
+// 	});
+</script>
 	<!--导航条-->
-	  <div class="top_menu">
-	    <div class="container-fluid"><span class="top_name">Tips： 德行的实现是由行为，不是由文字，请遵纪守法。</span>
-	      <div class="language"><img src="img/Chinese.gif" alt="中文版"></div>
-	    </div>
-	  </div>
-	<nav class="navbar navbar-default" style="margin-bottom: 0; background-color: deepskyblue">
-	  <div class="container">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	      <p class="logo_box"><a href="javascript:;"><img src="img/log.jpg" class="logo"/></a></p>
-	    </div>
-	
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="margin-left: 100px;">
-	      <ul class="nav navbar-nav">
-	         <li><a th:href="@{index}">首页 <span class="sr-only">(current)</span></a></li>     
-	        <li><a th:href="@{findGoods(classification.c_type=寻物,pageNum = 1)}">寻物 <span class="sr-only">(current)</span></a></li>
-	        <li><a th:href="@{findGoods(classification.c_type=招领,pageNum = 1)}">招领 <span class="sr-only">(current)</span></a></li>
-	        <li><a href="#">公告</a></li>
-	      </ul>
-	      <ul class="nav navbar-nav navbar-right">
-	        <li class="dropdown" th:if="${session.USER_SESSION == null}">
-	        	<a href="#">
-	        		<span class="glyphicon glyphicon-user"></span>
-	          		<span>未登录</span>
-	        	</a>
-	        </li>
-	        <li class="dropdown" th:if="${session.USER_SESSION != null}">	        	
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-	          	<span class="glyphicon glyphicon-user"></span>
-	          	<span th:text="${session.USER_SESSION.username}"></span>
-	          	<span class="caret"></span>
-	          </a>
-	          
-	          <ul class="dropdown-menu">
-	          	<input id="ids" th:value="${session.USER_SESSION.u_id}" type="hidden">
-	            <li><a href="#"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;我的认领</a></li>
-	            <li><a href="#"><span class="glyphicon glyphicon-export"></span>&nbsp;&nbsp;我的发布</a></li>
-	            <li><a href="#"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;个人信息</a></li>
-	            <li><a th:href="@{logout}"><span class="glyphicon glyphicon-off"></span>&nbsp;&nbsp;退出登录</a></li>
-	          </ul>
-	        </li>
-	      </ul>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
-	
+	<div th:replace="mycode :: mytop"></div>
 	<!--主页面-->
 		<div class="container">
 			<div class="row">
@@ -289,64 +219,15 @@
 				
 				
 			</div>
-						</div>
 			</div>
-	    
-	  
-	
-						
-	
-	
-  
-  	
-  
+			</div>
 	<!--联系我们-->
 	<div class="container">
-	<div class="row">
-	<div class="col-xs-12 col-sm-4 col-md-5">
-      <div class="index_contact">
-        <h1 class="title_h1">联系我们</h1>
-        <span class="title_span">CONTACT US</span>
-        <p style="padding-top:20px;">联系人：JJ</p>
-        <p>传真：86211818</p>
-        <p>电话：0769-86211777</p>
-        <p>邮箱：zsgdst@126.com</p>
-        <p>地址：广东省东莞市南城区西湖路99号</p>
-      </div>
-    </div>
-    <div class="col-xs-12 col-sm-8 col-md-7">
-      <div class="news_box">
-        <h1 class="title_h1">友情链接</h1>
-        <span class="title_span">FRIENDLY LINK</span>
-        <ul class="index_news">
-          <li><a target="_blank" href="">官方官网</a><a target="_blank" href="https://www.diunal.com/">丢哪了</a><a target="_blank" href="https://tieba.baidu.com/f?ie=utf-8&kw=%E5%A4%B1%E7%89%A9%E6%8B%9B%E9%A2%86&traceid=">招领贴吧</a></li>
-          <li><a target="_blank" href="http://gdga.gd.gov.cn/">广东公安</a><a target="_blank" href="https://www.163yun.com/">网易云</a><a target="_blank" href="http://www.mmissing.com/indexsubfile/classceshi.html">米西寻找</a></li>
-          <li><a target="_blank" href="https://map.baidu.com/@12666864,2615378,12.91z">百度地图</a><a target="_blank" href="https://cloud.tencent.com/">腾讯云</a><a target="_blank" href="http://www.cswzl.com/">中国失物招领</a></li>
-          <li><a target="_blank" href="https://www.xianren.net/#page2">闲人网络</a><a target="_blank" href="https://www.aliyun.com/?utm_content=se_1000301881">阿里云</a><a target="_blank" href="http://www.gdust.cn/">广东科技学院</a></li>
-         
-        </ul>
-      </div>
-    </div>	
-    </div>
-	</div>
-	</div>
-	
+		<div th:replace="mycode :: myLink"></div>
+	</div>	
 	<!--尾部-->
-	<footer>
-		<div class="container-fluid">
-		  <div class="copyright">
-		    <p>CopyRight 2019 All Right Reserved &nbsp;ICP:873468834<a href="javascript:;" target="_blank">网站地图</a></p>
-		    <p class="copyright_p">地址：广东省东莞市南城区西湖路99号 &nbsp;电话：0769-86211777 &nbsp;传真：86211818&nbsp;</p>
-		  </div>
-  	</div>
-	</footer>
-	
-	<!--发布与返回-->
-	<a href="#" data-toggle="modal"><div class="son1" onclick="setStatus('寻物中')">丢失物品</div></a>
-	<a href="#" data-toggle="modal"><div class="son2" onclick="setStatus('招领中')">找到物品</div></a>
-	<a href="#top"><div class="son3">回返顶部</div></a>
-	
-	
+	<div th:replace="mycode :: myfoot"></div>
+
 	<!--修改客户模态框-->
 	<div class="modal fade" id="editUserDialog" tabindex="-1"
 		role="dialog" aria-labelledby="myModalLabel">
@@ -440,101 +321,7 @@
 		</div>
 	</div>
 	
-	<!--新建物品模态框-->
-	<div class="modal fade" id="newGoodsDialog" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel">新建失物信息</h4>
-				</div>
-				<div class="modal-body">
-					<form class="form-horizontal" id="new_goods_form">
-						<div class="form-group">
-							<label class="col-sm-2 control-label"> 失物名称 </label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" placeholder="失物名称"
-									name="g_name" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">丢失时间</label>
-							<div class="col-sm-10">
-								<input type="date" class="form-control" placeholder="丢失时间"
-									name="g_ltime" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label style="float: left; padding: 7px 15px 0 27px;">丢失地点</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" placeholder="丢失地点"
-									name="g_place" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label style="float: left; padding: 7px 15px 0 27px;">失物标题</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" placeholder="失物标题"
-									name="g_title" />
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">描述信息</label>
-							<div class="col-sm-10">
-								<textarea rows="3" class=form-control placeholder="描述信息" name="g_describe" style="resize: none;"></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">关键信息</label>
-							<div class="col-sm-10">
-								<textarea rows="3" class=form-control placeholder="关键信息" name="g_key" style="resize: none;"></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">失物类型</label>
-							<div class="col-sm-10">
-								<select class="form-control" name="g_type">
-									<option value="" selected="selected">---失物类型---</option>
-									<option value="电子产品">电子产品</option>
-									<option value="贵重物品">贵重物品</option>
-									<option value="书籍">书籍</option>
-									<option value="证件">证件</option>
-									<option value="服饰">服饰</option>
-									<option value="其他">其他</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">失物状态</label>
-							<div class="col-sm-10">
-								<select class="form-control" id="c_status" name="classification.c_status">
-									<option value="寻物中">寻物中</option>
-									<option value="招领中">招领中</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">上传图片</label>
-							<div class="col-sm-10">
-								<input type="file" class="form-control" placeholder="上传图片"
-									name="file" />
-							</div>
-							<input type="hidden" name="user.u_id" id="u_id">
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary"
-						onclick="createGoods()">添加失物</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 	
 	
 	<!--修改物品模态框-->

@@ -54,9 +54,18 @@ public class MyController {
 	public String toAdmin() {
 		return "admin";
 	}
+	
+	/**
+	 * 跳转到公告页面
+	 * @return
+	 */
+	@RequestMapping("/announcement")
+	public String toAnnouncement() {
+		return "announcement";
+	}
 
 	@RequestMapping("/home")
-	public String toHome(int id, Model model) {
+	public String toHome(int id, Model model,String move) {
 		FLUser user = userService.findUserById(id);
 		model.addAttribute("user", user);
 		List<Goods> goodses = goodsService.findGoodsByUser(id);
@@ -74,6 +83,7 @@ public class MyController {
 		message.setGoods(goods);
 		Page<Message> messages = messageService.findMessageBy(message);
 		model.addAttribute("messages", messages);
+		model.addAttribute("move",move);
 		return "home";
 	}
 

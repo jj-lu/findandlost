@@ -134,5 +134,33 @@
 		select * from tb_goods g join tb_user u on g.u_id = u.u_id where u.u_id = #{id}
 	</select>
 	
-
+	<select id="statisticsGoodsType" parameterType="String" resultType="GoodsType">
+		SELECT g.g_type,COUNT(*) count
+		FROM tb_goods g JOIN tb_classification c
+		ON g.c_id = c.c_id
+		WHERE c.c_type = #{g_type}
+		GROUP BY g.g_type
+	</select>
+	
+	<resultMap type="SuccessJSON" id="JSON">
+		<result column = "name" property = "c_status"/>
+		<result column = "value" property = "count"/>
+	</resultMap>
+	<select id="statisticsGoodsSuccess" parameterType="String" resultType="GoodsSuccess">
+		SELECT c.c_status,COUNT(*) count
+		FROM tb_goods g JOIN tb_classification c
+		ON g.c_id = c.c_id
+		WHERE c.c_type = #{c_type}
+		GROUP BY c.c_status
+	</select>
+	
+	<select id="statisticsRecentCount" parameterType="String" resultType="RecentCount">
+		SELECT g.g_ltime,COUNT(*) count
+		FROM tb_goods g JOIN tb_classification c
+		ON g.c_id = c.c_id
+		WHERE c.c_type = #{c_type}
+		GROUP BY g.g_ltime
+		ORDER BY g.g_ltime DESC
+		LIMIT 0,7
+	</select>
 </mapper>
