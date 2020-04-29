@@ -4,21 +4,36 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class Goods {
 
-	private Integer g_id;
+	private Integer g_id;	
+	@NotBlank(message = "请填写物品名称")
 	private String g_name;
+	
 	private String g_type;
+	
+	@NotNull(message = "请填写完整物品的丢失时间")
 	private Date g_ltime;
+	
+	@NotBlank(message = "请填写失物大概丢失的位置")
 	private String g_place;
+	
 	private String g_picture;
 	private Timestamp g_rtime;
+	
+	@NotBlank(message = "请填写启示标题")
 	private String g_title;
+	
+	@NotBlank(message = "请填写物品描述信息")
 	private String g_describe;
+	
+	@NotBlank(message = "请填写物品关键信息")
 	private String g_key;
-//	private Integer u_id;
+
 	private FLUser user;
-//	private Integer c_id;
 	private Classification classification;
 	private List<Message> message;
 	public Integer getG_id() {

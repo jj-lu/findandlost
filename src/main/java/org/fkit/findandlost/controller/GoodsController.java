@@ -7,7 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.fkit.findandlost.bean.Goods;
 import org.fkit.findandlost.bean.GoodsData;
 import org.fkit.findandlost.service.GoodsService;
@@ -15,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +34,15 @@ public class GoodsController {
 	@Autowired
 	private GoodsService goodsService;
 	
+	//日志类
+	private Logger logger = LogManager.getLogger(GoodsController.class);
+	
 	
 	@RequestMapping("/findGoodsById")
 	@ResponseBody
 	public Goods findGoodsById(int id){
 		Goods goods = goodsService.findGoodsById(id);
-		System.out.println(goods);
+		logger.info(goods);
 		return goods;
 	}
 	
@@ -96,6 +104,11 @@ public class GoodsController {
 	}
 	
 	
+	/**
+	 * 删除物品信息
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("/deleteGoods")
 	@ResponseBody
 	public String deleteGoods(int id) {
@@ -108,6 +121,14 @@ public class GoodsController {
 		}
 	}
 	
+	/**
+	 * 更新物品信息
+	 * @param goods
+	 * @param file
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
 	@RequestMapping("/updateGoods")
 	@ResponseBody
 	public String updateGoods(Goods goods,MultipartFile file) throws IllegalStateException, IOException {
@@ -120,10 +141,24 @@ public class GoodsController {
 		}
 	}
 	
+	/**
+	 * 添加物品信息
+	 * @param file
+	 * @param goods
+	 * @return
+	 * @throws IllegalStateException
+	 * @throws IOException
+	 */
 	@RequestMapping("/insertGoods")
 	@ResponseBody
-	public String insertGoods(MultipartFile file,Goods goods) throws IllegalStateException, IOException {
-		System.out.println(goods);
+	public String insertGoods(MultipartFile file,@Valid Goods goods,BindingResult results) throws IllegalStateException, IOException {
+		//日志输出goods获取的内容
+		logger.info("前端传入的goods信息： "+goods);
+		//检测表单数据
+		for(ObjectError error : results.getAllErrors()) {
+			logger.info("错误信息："+error.getDefaultMessage());
+			return error.getDefaultMessage();
+		}
 		int i = goodsService.insertGoods(file,goods);
 		if(i >= 1 ) {
 			return "OK";
@@ -141,7 +176,11 @@ public class GoodsController {
 		return "detail"; 
 	}
 	
-//		日期的转换类
+	/**
+	 * 日期转换类
+	 * @param request
+	 * @param binder
+	 */
 	  @InitBinder
 	    protected void init(HttpServletRequest request, ServletRequestDataBinder binder) {
 	        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

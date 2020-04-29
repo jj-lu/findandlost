@@ -2,6 +2,13 @@ package org.fkit.findandlost.bean;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotBlank;
+
+/**
+ * 申请信息
+ * @author JJ
+ *
+ */
 public class Apply {
 
 	private Integer a_id;
@@ -9,6 +16,7 @@ public class Apply {
 //	private Integer g_id;
 	private String a_status;
 	private Timestamp a_rtime;
+	@NotBlank
 	private String a_key;
 	private FLUser user;
 	private Goods goods;

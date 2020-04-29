@@ -78,7 +78,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="#">修改管理员信息</a></li>
 							<li role="separator" class="divider"></li>
-							<li><a href="#">退出平台</a></li>
+							<li><a th:href="@{logout}">退出平台</a></li>
 						</ul></li>
 				</ul>
 			</div>
@@ -103,8 +103,6 @@
 			</ul>
 			<li><a th:href="@{findMessageBy(pageNum = 1,user.loginname=null,goods.g_name=null)}" target="main"><span
 					class="glyphicon glyphicon-menu-hamburger"></span>&nbsp;留言管理</a></li>
-			<li><a href="#" data-toggle="collapse"><span
-					class="glyphicon glyphicon-list-alt"></span>&nbsp;发布管理</a></li>
 		</ul>
 	</div>
 	<!--主页面-->

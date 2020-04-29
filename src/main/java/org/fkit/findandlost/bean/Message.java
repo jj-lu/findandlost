@@ -2,9 +2,12 @@ package org.fkit.findandlost.bean;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotBlank;
+
 public class Message {
 
 	private Integer m_id;
+	@NotBlank
 	private String message;
 	private Timestamp m_rtime;
 	private Integer g_id;

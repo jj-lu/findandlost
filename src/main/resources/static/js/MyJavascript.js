@@ -114,8 +114,7 @@ var clock = '';
 		            	alert("失物添加成功！");
 		            	window.location.reload();
 		            }else{
-		            	alert("失物添加失败！");
-		            	window.location.reload();
+		            	alert(data);
 		            }
 		        }  
 			})

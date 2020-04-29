@@ -2,10 +2,25 @@ package org.fkit.findandlost.bean;
 
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+
+/**
+ * 用户信息
+ * @author JJ
+ *
+ */
 public class FLUser {
 
+	//用户Id
 	private Integer u_id;
+	
+	//登录名
+	@NotBlank
 	private String loginname;
+	
+	//用户名
+	@NotBlank
+	
 	private String username;
 	private String password;
 	private String email;
