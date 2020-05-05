@@ -1,12 +1,17 @@
 package org.fkit.findandlost.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.fkit.findandlost.bean.FLUser;
 import org.fkit.findandlost.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,7 +24,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	
+	private static Logger logger = LogManager.getLogger();
 	
 //	@RequestMapping("/findUser")
 //	public String getUserList(Integer pageNum, Model model){
@@ -30,6 +35,11 @@ public class UserController {
 //		return "admin";
 //	}
 	
+	/**
+	 * 删除用户
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("/deleteUser")
 	@ResponseBody
 	public String deleteUser(int id) {
@@ -42,10 +52,19 @@ public class UserController {
 		}
 	}
 	
+	/**
+	 * 注册用户
+	 * @param user
+	 * @param result
+	 * @return
+	 */
 	@RequestMapping("/insertUser")
 	@ResponseBody
-	public String insertUser(FLUser user) {
-		System.out.println(user);
+	public String insertUser(@Valid FLUser user,BindingResult result) {
+		logger.info("注册的用户："+user);
+		for(ObjectError error : result.getAllErrors()) {
+			return error.getDefaultMessage();
+		}
 		int i = userService.insertUser(user);
 		if(i >= 1 ) {
 			return "OK";
@@ -74,10 +93,18 @@ public class UserController {
 		return "false";
 	}
 	
+	/**
+	 * 更新用户信息
+	 * @param user
+	 * @return
+	 */
 	@RequestMapping("/updateUser")
 	@ResponseBody
-	public String updateUser(FLUser user) {
-		System.out.println(user);
+	public String updateUser(@Valid FLUser user,BindingResult result) {
+		//检测用户信息是否正确
+		for(ObjectError error : result.getAllErrors()) {
+			return error.getDefaultMessage();
+		}		
 		int i = userService.updateUser(user);
 		if(i >= 1 ) {
 			return "OK";
@@ -86,6 +113,11 @@ public class UserController {
 		}
 	}
 	
+	/**
+	 * 根据用户id查询用户（更新用户信息时使用）
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("/findUserById")
 	@ResponseBody
 	public FLUser findUserById(Integer id) {

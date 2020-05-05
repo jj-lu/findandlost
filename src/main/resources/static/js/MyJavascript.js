@@ -62,7 +62,7 @@ var clock = '';
 					if(data == "OK"){
 						alert("注册用户成功！");
 					}else{
-						alert("注册用户失败，请检查数据！")
+						alert(data);
 					}
 				}
 			});
@@ -148,8 +148,8 @@ var clock = '';
 			    		 alert("物品修改成功");
 			    		 window.location.reload();
 			    	 }else{
-			    		 alert("物品修改失败！");
-			    		 window.location.reload();
+			    		 alert(data);
+			    		 //window.location.reload();
 			    	 }
 			     }
 			})
@@ -300,8 +300,8 @@ function insertMessage(){
 			    		window.location.reload();
 			    		
 			    	}else{
-			    		alert("留言发布失败");
-			    		window.location.reload();
+			    		alert(data);
+			    		//window.location.reload();
 			    	}
 			    }
 			})
@@ -333,8 +333,8 @@ function insertMessage(){
 						alert("更新成功！");
 						window.location.reload();
 					}else{
-						alert("更新失败");
-						window.location.reload();
+						alert(data);
+						//window.location.reload();
 					}
 				});
 	}
@@ -416,8 +416,8 @@ function insertApply(){
 			    		window.location.reload();
 			    		
 			    	}else{
-			    		alert("发起申领物品失败");
-			    		window.location.reload();
+			    		alert(data);
+			    		//window.location.reload();
 			    	}
 			    }
 			})
@@ -449,8 +449,8 @@ function insertApply(){
 				alert("审核完成！");
 				window.location.reload();
 			} else {
-				alert("审核失败！");
-				window.location.reload();
+				alert(data);
+				//window.location.reload();
 			}
 		});
 	}
@@ -541,8 +541,8 @@ function insertApply(){
 						alert("用户创建成功！");
 						window.location.reload();
 					} else {
-						alert("用户创建失败！");
-						window.location.reload();
+						alert(data);
+						//window.location.reload();
 					}
 				});
 	}
@@ -555,8 +555,8 @@ function insertApply(){
 				alert("用户修改成功！");
 				window.location.reload();
 			} else {
-				alert("用户修改失败！");
-				window.location.reload();
+				alert(data);
+				//window.location.reload();
 			}
 		});
 	}

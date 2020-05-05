@@ -7,7 +7,8 @@ import javax.validation.constraints.NotBlank;
 public class Message {
 
 	private Integer m_id;
-	@NotBlank
+	
+	@NotBlank(message = "发布留言不能为空")
 	private String message;
 	private Timestamp m_rtime;
 	private Integer g_id;

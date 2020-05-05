@@ -11,9 +11,25 @@
 <link href="css/bootstrap.min.css" rel="stylesheet"/>
 <link href="css/style.css" rel="stylesheet"/>
 <link href="css/login.css" rel="stylesheet"/>
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/MyJavascript.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/MyJavascript.js"></script>
+	<script src="js/jqthumb.min.js"></script>
+	
+	<script type="text/javascript">
+		//处理缩略图
+		function DrawImage(img){
+			console.info("裁图");
+			$(img).jqthumb({
+				//console.info("裁图");
+				width : '100%',//宽度
+				height : '100px',//高度
+				//position : { y: '50%', x: '50%'},//从图片的中间开始产生缩略图
+				zoom : '1',//缩放比例
+				method : 'auto'//提交方法，用于不同的浏览器环境，默认为‘auto’
+			});
+		}
+	</script>
 <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
 <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
 <!--[if lt IE 9]-->
@@ -99,7 +115,10 @@
 						        <h4 th:text="${goods.g_title}">Thumbnail label</h4>
 						      </div>
 						      <hr />
-						      <img th:src="${'img/'+goods.g_picture}" class="img-responsive img-responsive" alt="失物图片" width="242px">
+						      <img th:src="${'img/'+goods.g_picture}" class="img-responsive" οnlοad="DrawImage(this)" alt="失物图片" >
+<!-- 						      <img src="img/huai.jpg" class="img-responsive" οnlοad="DrawImage(this)" alt="失物图片" > -->
+<!-- 						       <img src="img/huai.jpg"alt="..."  class="img-responsive"  οnlοad="DrawImage(this)" > -->
+						      
 					      </a>
 					    </div>
 					  </div>
@@ -124,5 +143,11 @@
 	</div>	
 	<!--尾部-->
 	<div th:replace="mycode :: myfoot"></div>
+	<script type="text/javascript">
+		function a(){
+			alert("aa");
+		}
+	</script>
+
 </body>
 </html>

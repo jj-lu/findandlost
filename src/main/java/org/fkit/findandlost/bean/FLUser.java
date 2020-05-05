@@ -2,7 +2,10 @@ package org.fkit.findandlost.bean;
 
 import java.util.List;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * 用户信息
@@ -15,20 +18,45 @@ public class FLUser {
 	private Integer u_id;
 	
 	//登录名
-	@NotBlank
+	@NotBlank(message = "登录名不能为空")
 	private String loginname;
 	
 	//用户名
-	@NotBlank
-	
+	@NotBlank(message = "用户名不能为空")
+	@Size(min = 2,max = 10,message="用户名长度必须是2-10个字符")
 	private String username;
+	
+	//密码
+	@NotBlank(message = "密码不能为空")
+	@Size(min = 6,max = 18,message="密码长度必须是6-18个字符")
 	private String password;
+	
+	//电子邮箱
+	@Email(message = "邮箱地址不能为空")
+	@NotBlank(message = "请输入正确的邮箱信息")
 	private String email;
+	
+	//联系电话
+	@NotBlank(message = "联系电话不能为空")
+	@Pattern(regexp = "\\d{11}$",message = "联系电话必须位11位号码")
 	private String phone;
+	
+	//QQ号码
+	@Pattern(regexp = "[1-9][0-9]{4,14}",message = "请输入正确的QQ")
 	private String qq;
+	
+	//身份证
+	@NotBlank(message = "身份证信息不能为空")
+	@Pattern(regexp = "\\d{18}$",message = "输入正确的18位身份证号码")
 	private String idcard;
+	
+	//性别
 	private Character sex;
+	
+	//班级
 	private String clazz;
+	
+	//用户权限
 	private String role;
 	private List<Goods> goodses;
 	private List<Apply> applys;

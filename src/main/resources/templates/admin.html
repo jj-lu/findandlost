@@ -44,7 +44,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" th:href="@{index}">失物招领系统管理平台</a>
+				<a class="navbar-brand">失物招领系统管理平台</a>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
@@ -63,11 +63,11 @@
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false"><span
 							class="glyphicon glyphicon-envelope"></span>&nbsp;申请信息&nbsp;<span
-							class="badge" style="background: #B92C28;">23</span></a>
+							class="badge" style="background: #B92C28;">3</span></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">有人想要 认领物品</a></li>
-							<li><a href="#">有人想要 归回物品</a></li>
-							<li><a href="#">有人想要 归回物品</a></li>
+							<li><a th:href="@{/findApplyBy(pageNum = 1,user.username=null,goods.g_name=null,a_status=未审核)}" target="main">赵云 想要 认领物品</a></li>
+							<li><a th:href="@{/findApplyBy(pageNum = 1,user.username=null,goods.g_name=null,a_status=未审核)}" target="main">诸葛亮 想要 归回物品</a></li>
+							<li><a th:href="@{/findApplyBy(pageNum = 1,user.username=null,goods.g_name=null,a_status=未审核)}" target="main">张飞 想要 归回物品</a></li>
 							<li role="separator" class="divider"></li>
 							<li><a href="#">更多信息</a></li>
 						</ul></li>
@@ -76,9 +76,11 @@
 						aria-expanded="false"><span class="glyphicon glyphicon-user"></span>&nbsp;<span th:text="${session.USER_SESSION.username}"/>
 							<span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">修改管理员信息</a></li>
+							<li><a href="#" data-toggle="modal" 
+		           					data-target="#editUserDialog" th:onclick="|editUser(1)|">修改管理员信息</a></li>
 							<li role="separator" class="divider"></li>
-							<li><a th:href="@{logout}">退出平台</a></li>
+							<li><a th:href="@{index}">返回失物招领系统</a></li>
+							<li><a th:href="@{logout}">退出登录</a></li>
 						</ul></li>
 				</ul>
 			</div>
@@ -112,9 +114,112 @@
 			<iframe th:src="@{findUserBy(pageNum = 1)}" name="main"  frameborder="0" scrolling="no" class="col-md-12" height="600px"></iframe>		
 		</div>
 	</div>
+	
+	<!-- 修改用户模态框 -->
+	<div class="modal fade" id="editUserDialog" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">修改用户信息</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="edit_user_form">
+						<div class="form-group">
+							<label class="col-sm-2 control-label"> 登录名 </label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_loginname" class="form-control"
+									placeholder="登录名" name="loginname" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">用户名</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_username" class="form-control"
+									placeholder="用户名" name="username" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">登录密码</label>
+							<div class="col-sm-10">
+								<input type="password" id="edit_password" class="form-control"
+									placeholder="登录密码" name="password" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label style="float: left; padding: 7px 15px 0 27px;">电子邮箱</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_email" class="form-control"
+									placeholder="电子邮箱" name="email" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">联系电话</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_phone" class="form-control"
+									placeholder="联系电话" name="phone" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">QQ</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_qq" class="form-control"
+									placeholder="QQ" name="qq" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">性别</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="edit_sex" name="sex">
+									<option value="">--请选择--</option>
+									<option value="男">男</option>
+									<option value="女">女</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">身份证</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_idcard" class="form-control"
+									placeholder="身份证号码" name="idcard" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">班级</label>
+							<div class="col-sm-10">
+								<input type="text" id="edit_clazz" class="form-control"
+									placeholder="班级" name="clazz" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">权限</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="edit_role" name="role">
+									<option value="ROLE_USER" selected="selected">用户</option>
+									<option value="ROLE_ADMIN">管理员</option>
+								</select>
+							</div>
+							<input type="hidden" id="id" name="u_id">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary"
+						onclick="updateUser()">修改客户</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	
+	<script src="js/MyJavascript.js"></script>
 
 </body>
 </html>

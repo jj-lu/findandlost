@@ -78,8 +78,8 @@
 					    	</tr>
 					    </thead>
 					    <tbody>
-					    	<tr th:each="apply : ${applys}" >
-					    		<td style="vertical-align: middle!important;">1</td>
+					    	<tr th:each="apply,id : ${applys}" >
+					    		<td style="vertical-align: middle!important;" th:text="${id.count}">1</td>
 					    		<td style="vertical-align: middle!important;" th:text="${apply.user.username}">2</td>
 					    		<td style="vertical-align: middle!important;" th:text="${apply.goods.g_name}">3</td>
 					    		<td style="vertical-align: middle!important;" th:text="${apply.a_rtime}">4</td>

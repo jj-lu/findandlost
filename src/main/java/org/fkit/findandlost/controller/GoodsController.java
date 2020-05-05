@@ -131,8 +131,12 @@ public class GoodsController {
 	 */
 	@RequestMapping("/updateGoods")
 	@ResponseBody
-	public String updateGoods(Goods goods,MultipartFile file) throws IllegalStateException, IOException {
-		System.out.println(goods);
+	public String updateGoods(@Valid Goods goods,MultipartFile file,BindingResult result) throws IllegalStateException, IOException {
+		//检测物品信息
+		for(ObjectError error : result.getAllErrors()) {
+			logger.info("错误信息："+error.getDefaultMessage());
+			return error.getDefaultMessage();
+		}
 		int i =  goodsService.updateGoods(file,goods);
 		if(i > 0) {
 			return "OK";

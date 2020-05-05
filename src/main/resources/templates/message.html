@@ -78,8 +78,8 @@
 					    	</tr>
 					    </thead>
 					    <tbody>
-					    	<tr th:each="message : ${messages}" >
-					    		<td style="vertical-align: middle!important;">1</td>
+					    	<tr th:each="message,id : ${messages}" >
+					    		<td style="vertical-align: middle!important;" th:text="${id.count}">1</td>
 					    		<td style="vertical-align: middle!important;" th:text="${message.user.loginname}">2</td>
 					    		<td style="vertical-align: middle!important;" th:text="${message.goods.g_name}">3</td>
 					    		<td style="vertical-align: middle!important;" th:text="${message.m_rtime}">4</td>

@@ -5,13 +5,18 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.fkit.findandlost.bean.Message;
 import org.fkit.findandlost.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +28,19 @@ import com.github.pagehelper.PageHelper;
 @Controller
 public class MessageController {
 	
+	private Logger logger = LogManager.getLogger(MessageController.class);
+	
 	@Autowired
 	private MessageService messageService;
 
 	@RequestMapping("/insertMessage")
 	@ResponseBody
-	public String insertMessage(Message message) {
-		System.out.println(message);
+	public String insertMessage(@Valid Message message,BindingResult result) {
+		//
+		for(ObjectError error : result.getAllErrors()) {
+			logger.info("错误信息："+error.getDefaultMessage());
+			return error.getDefaultMessage();
+		}
 		int i = messageService.insertMessage(message);
 		if(i > 0) {
 			return "OK";
@@ -51,7 +62,11 @@ public class MessageController {
 	
 	@RequestMapping("/updateMessage")
 	@ResponseBody
-	public String updateMessage(Message message) {
+	public String updateMessage(@Valid Message message,BindingResult result) {
+		for(ObjectError error : result.getAllErrors()) {
+			logger.info("错误信息："+error.getDefaultMessage());
+			return error.getDefaultMessage();
+		}
 		int i = messageService.updateMessage(message);
 		if(i > 0) {
 			return "OK";

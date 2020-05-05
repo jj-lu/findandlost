@@ -16,7 +16,9 @@ public class Apply {
 //	private Integer g_id;
 	private String a_status;
 	private Timestamp a_rtime;
-	@NotBlank
+	
+	//申领的关键信息
+	@NotBlank(message = "请输入需要申领物品的关键信息")
 	private String a_key;
 	private FLUser user;
 	private Goods goods;

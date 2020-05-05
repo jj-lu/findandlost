@@ -5,14 +5,18 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.fkit.findandlost.bean.Apply;
-import org.fkit.findandlost.bean.Message;
 import org.fkit.findandlost.service.ApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,13 +28,18 @@ import com.github.pagehelper.PageHelper;
 @Controller
 public class ApplyController {
 	
+	private Logger logger = LogManager.getLogger(ApplyController.class);
+	
 	@Autowired
 	private ApplyService applyService;
 
 	@RequestMapping("/insertApply")
 	@ResponseBody
-	public String insertApply(Apply apply) {
-		System.out.println(apply);
+	public String insertApply(@Valid Apply apply,BindingResult result) {
+		for(ObjectError error : result.getAllErrors()) {
+			logger.info("错误信息："+error.getDefaultMessage());
+			return error.getDefaultMessage();
+		}
 		int i = applyService.insertApply(apply);
 		if(i > 0) {
 			return "OK";
@@ -52,7 +61,11 @@ public class ApplyController {
 	
 	@RequestMapping("/updateApply")
 	@ResponseBody
-	public String updateApply(Apply apply) {
+	public String updateApply(@Valid Apply apply,BindingResult result) {
+		for(ObjectError error : result.getAllErrors()) {
+			logger.info("错误信息："+error.getDefaultMessage());
+			return error.getDefaultMessage();
+		}
 		int i = applyService.updateApply(apply);
 		if(i > 0) {
 			return "OK";
