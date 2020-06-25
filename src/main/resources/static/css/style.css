@@ -1,4 +1,4 @@
-ï»¿
+
 
 @font-face { 
 font-family: Roboto; 
@@ -28,7 +28,8 @@ src: url('../images/Roboto-Light.ttf');
 .top_name{display: inline-block; padding-top:6px;}
 .logo_box{ height: 65px;}
 .logo{height: 60px; margin-top: 3px;}
-.navbar{height: 65px; }
+/*.navbar{height: 65px; }*/
+.navbar{margin-bottom: 0px;}
 .navbar-nav > li > a {text-align: center; font-size: 25px; margin-top: 5px;}
 .navbar-right > li > a{text-align: center; font-size: 15px; margin-top: 5px;}
 
@@ -36,7 +37,7 @@ src: url('../images/Roboto-Light.ttf');
 .index_product div.product_img{}
 .pro_title{clear: both; width: 240px; height: 45; margin: 40px auto 35px auto; border: 1px solid #71ac74; text-align: center;}
 .pro_title p{color: #71ac74;text-transform: uppercase;font-family: 'Times New Roman';font-size: 28px; font-weight: bold; background-color:#fff; margin: -20px auto -2px auto; width: 170px}
-.pro_title span{display: block;font-family: 'å¹¼åœ†';font-size: 17px; font-weight: bold; padding-bottom: 7px;}
+.pro_title span{display: block;font-family: 'Ó×Ô²';font-size: 17px; font-weight: bold; padding-bottom: 7px;}
 .caption{text-align: center;}
 .aboutus{text-align: center; color: #fff; padding: 35px 20px 60px 20px; margin: 10px 0px 10px 0px; }
 .aboutus h2{font-size: 46px;font-weight: 300;font-family:'Roboto';}
@@ -53,16 +54,16 @@ footer{ text-align:center; background-color: #4b4b4a; color:#ababa8; padding:30p
 .index_news li{color:#545455;border-bottom: 1px dotted #dddddd;background: url(../images/news_li.png) no-repeat left 12px;line-height:21px; padding: 10px 0px; padding-left:16px;}
 .index_news li a{color:#7F7F80;font-family:Arial;transition:color 0.3s;margin-right: 100px;}
 .index_news li a:hover{ text-decoration:none;color:#d8b571; }
-.son1{width:70px;height:70px;position:fixed;right:30px;bottom:200px;border:0px solid #000;text-align:center;line-height:30px;
-background: #D5D5D5;font-size: 25px;text-shadow: 5px 5px 5px black, 0px 0px 2px black; color: white;}
-.son2{width:70px;height:70px;position:fixed;right:30px;bottom:130px;border:0px solid #000;text-align:center;line-height:30px;
-background: #D5D5D5;font-size: 25px;text-shadow: 5px 5px 5px black, 0px 0px 2px black; color: white;}
-.son3{width:70px;height:70px;position:fixed;right:30px;bottom:60px;border:0px solid #000;text-align:center;line-height:30px;
-background: #D5D5D5;font-size: 25px;text-shadow: 5px 5px 5px black, 0px 0px 2px black; color: white;}
-.son1:hover,.son2:hover,.son3:hover{background: deepskyblue}
+.son1{width:70px;height:70px;border-radius:50%;position:fixed;right:30px;bottom:200px;border:0px solid #000;text-align:center;line-height:30px;
+font-size: 25px;text-shadow: 5px 5px 5px black, 0px 0px 2px black; color: white;}
+.son2{width:70px;height:70px;border-radius:50%;position:fixed;right:30px;bottom:130px;border:0px solid #000;text-align:center;line-height:30px;
+font-size: 25px;text-shadow: 5px 5px 5px black, 0px 0px 2px black; color: white;}
+.son3{width:70px;height:70px;border-radius:50%;position:fixed;right:30px;bottom:60px;border:0px solid #000;text-align:center;line-height:center;
+font-size: 50px;text-shadow: 5px 5px 5px black, 0px 0px 2px black; color: white;}
+.son1:hover,.son2:hover,.son3:hover{color: deepskyblue}
 .nav-tabs > li > a{font-size: 20px;font-family: kartika}
 
-/*å­—ä½“åŠ¨ç”»*/
+/*×ÖÌå¶¯»­*/
 #div1 span{
 	display:block;
 	float:left;

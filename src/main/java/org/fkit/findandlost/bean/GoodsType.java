@@ -6,6 +6,7 @@ public class GoodsType {
 	private String g_type;
 	//物品总数
 	private Integer count;
+	
 	public String getG_type() {
 		return g_type;
 	}
@@ -22,6 +23,7 @@ public class GoodsType {
 	public String toString() {
 		return "GoodsType [g_type=" + g_type + ", count=" + count + "]";
 	}
+	
 	
 	
 }

@@ -550,14 +550,11 @@ function insertApply(){
 	//修改用户
 	function updateUser() {
 		$.post("updateUser", $("#edit_user_form").serialize(), function(
-				data) {
-			if (data == "OK") {
-				alert("用户修改成功！");
+				result) {
+			alert(result.data);
+			if (result.code == 1000) {				
 				window.location.reload();
-			} else {
-				alert(data);
-				//window.location.reload();
-			}
+			} 
 		});
 	}
 
@@ -572,18 +569,22 @@ function insertApply(){
 			data : {
 				"id" : id
 			},
-			success : function(data) {
-				$("#edit_loginname").val(data.loginname);
-				$("#edit_username").val(data.username);
-				$("#edit_password").val(data.password);
-				$("#edit_email").val(data.email);
-				$("#edit_phone").val(data.phone);
-				$("#edit_qq").val(data.qq);
-				$("#edit_sex").val(data.sex);
-				$("#edit_idcard").val(data.idcard);
-				$("#edit_clazz").val(data.clazz);
-				$("#edit_role").val(data.role);
-				$("#id").val(data.u_id);
+			success : function(result) {
+				//alert(result.code);
+				if(result.code == 1000){
+					var data = result.data;
+					$("#edit_loginname").val(data.loginname);
+					$("#edit_username").val(data.username);
+					$("#edit_password").val(data.password);
+					$("#edit_email").val(data.email);
+					$("#edit_phone").val(data.phone);
+					$("#edit_qq").val(data.qq);
+					$("#edit_sex").val(data.sex);
+					$("#edit_idcard").val(data.idcard);
+					$("#edit_clazz").val(data.clazz);
+					$("#edit_role").val(data.role);
+					$("#id").val(data.u_id);
+				}
 			}
 		})
 

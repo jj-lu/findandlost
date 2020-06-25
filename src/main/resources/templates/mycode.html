@@ -18,51 +18,46 @@
 
 	<div th:fragment="mytop">
 		<!--导航条-->
-	  <div class="top_menu">
-	    <div class="container-fluid"><span class="top_name">Tips： 德行的实现是由行为，不是由文字，请遵纪守法。</span>
-	      <div class="language"><img src="img/Chinese.gif" alt="中文版"></div>
-	    </div>
-	  </div>
-	<nav class="navbar navbar-default" style="margin-bottom: 0; background-color: deepskyblue">
-	  <div class="container">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	      <p class="logo_box"><a href="javascript:;"><img src="img/log.jpg" class="logo"/></a></p>
-	    </div>
-	
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="margin-left: 100px;">
-	      <ul class="nav navbar-nav">
-	        <li><a th:href="@{index}">首页 <span class="sr-only">(current)</span></a></li>     
-	        <li><a th:href="@{findGoods(classification.c_type=寻物,pageNum = 1)}">寻物 <span class="sr-only">(current)</span></a></li>
-	        <li><a th:href="@{findGoods(classification.c_type=招领,pageNum = 1)}">招领 <span class="sr-only">(current)</span></a></li>
-	        <li><a th:href="@{announcement}">统计</a></li>
-	        
-	      </ul>
-	      <ul class="nav navbar-nav navbar-right">
-	      
-			
-	      	<li><a th:if="${session.USER_SESSION == null}" href="#" data-toggle="modal" data-target="#loginandresiter" id="Login_start_" class="btn btn-danger" style="width:100px;height:40px;border-radius: 0;">登录</a></li>
-	      	<li><a th:if="${session.USER_SESSION == null}" href="#" data-toggle="modal" data-target="#loginandresiter" id="Regist_start_" class="btn btn-success" style="width:100px;height:40px;border-radius: 0;">注册</a></li>
-	        <li class="dropdown" th:if="${session.USER_SESSION == null}">
-	        	<a href="#">
-	        		<span class="glyphicon glyphicon-user"></span>
-	          		<span>未登录</span>
-	        	</a>
-	        </li>
-	        <li class="dropdown" th:if="${session.USER_SESSION != null}">	        	
+		<div class="top_menu">
+		    <div class="container-fluid"><span class="top_name">Tips： 德行的实现是由行为，不是由文字，请遵纪守法。</span>
+		      <div class="language"><img src="img/Chinese.gif" alt="中文版"></div>
+		    </div>
+		  </div>
+		  
+		  
+	   <nav class="navbar navbar-default navbar-inverse">
+		  <div class="container">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="#">
+		      	<img src="img/log.png" />
+		      </a>
+		    </div>
+		
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		        <li><a th:href="@{index}">首页 <span class="sr-only">(current)</span></a></li>     
+		        <li><a th:href="@{findGoods(classification.c_type=寻物,pageNum = 1)}">寻物 <span class="sr-only">(current)</span></a></li>
+		        <li><a th:href="@{findGoods(classification.c_type=招领,pageNum = 1)}">招领 <span class="sr-only">(current)</span></a></li>
+		        <li><a th:href="@{announcement}">统计</a></li>
+		      </ul>
+		      
+		      <ul class="nav navbar-nav navbar-right">
+		        <li th:if="${session.USER_SESSION == null}"><a href="#" data-toggle="modal" data-target="#loginandresiter" id="Login_start_">登录/注册</a></li>
+		        <!--<li><a href="#">注册</a></li>-->
+		        <li class="dropdown" th:if="${session.USER_SESSION != null}">	        	
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 	          	<span class="glyphicon glyphicon-user"></span>
 	          	<span th:text="${session.USER_SESSION.username}"></span>
 	          	<span class="caret"></span>
 	          </a>
-	          
 	          <ul class="dropdown-menu">
 	          	<input id="ids" th:value="${session.USER_SESSION.u_id}" type="hidden">
 	            <li><a href="#"><span class="glyphicon glyphicon-th-list"></span>&nbsp;&nbsp;我的认领</a></li>
@@ -71,10 +66,10 @@
 	            <li><a th:href="@{logout}"><span class="glyphicon glyphicon-off"></span>&nbsp;&nbsp;退出登录</a></li>
 	          </ul>
 	        </li>
-	      </ul>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
 	
 	<!-- 	登录注册 -->
 	<div class="modal fade" id="loginandresiter" tabindex="-1" role="dialog" aria-labelledby="myLoginModalLabel">
@@ -198,7 +193,7 @@
 	<!--发布与返回-->
 	<a href="#" data-toggle="modal" ><div class="son1" onclick="setStatus('寻物中')">丢失物品</div></a>
 	<a href="#" data-toggle="modal" ><div class="son2" onclick="setStatus('招领中')">找到物品</div></a>
-	<a href="#top"><div class="son3">回返顶部</div></a>
+	<a href="#top"><div class="son3"><span class="glyphicon glyphicon-menu-up"></span></div></a>
 	<!--新建物品模态框-->
 	<div class="modal fade" id="newGoodsDialog" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
@@ -223,8 +218,22 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label">丢失时间</label>
 							<div class="col-sm-10">
-								<input type="date" class="form-control" placeholder="丢失时间"
-									name="g_ltime" />
+<!-- 								<input type="date" class="form-control" placeholder="丢失时间" -->
+<!-- 									name="g_ltime" /> -->
+								<div class="input-group date" id="ldatepicker" data-date-format="yyyy-mm-dd">
+		                            <input class="form-control" size="16" type="text"  readonly name="g_ltime" placeholder="丢失时间">
+		                            <div class="input-group-addon"><span class="add-on glyphicon glyphicon-calendar"></span></div>
+		                        </div>
+		                        <script>
+		                        	var ldatepicker = $("#ldatepicker");
+		                        	ldatepicker.datepicker({
+		                        		language:'zh-CN',
+		                	            //自动关闭
+		                	            autoclose: true
+		                        	});
+		                        	var current = new Date();
+		                        	ldatepicker.datepicker('setEndDate',current);
+		                        </script>
 							</div>
 						</div>
 						<div class="form-group">

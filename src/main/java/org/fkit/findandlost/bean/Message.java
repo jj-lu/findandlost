@@ -62,5 +62,20 @@ public class Message {
 		return "Message [m_id=" + m_id + ", message=" + message + ", m_rtime=" + m_rtime + ", g_id=" + g_id + ", u_id="
 				+ u_id + ", goods=" + goods + ", user=" + user + "]";
 	}
+	public Message(Integer m_id, @NotBlank(message = "发布留言不能为空") String message, Timestamp m_rtime, Integer g_id,
+			Integer u_id, Goods goods, FLUser user) {
+		super();
+		this.m_id = m_id;
+		this.message = message;
+		this.m_rtime = m_rtime;
+		this.g_id = g_id;
+		this.u_id = u_id;
+		this.goods = goods;
+		this.user = user;
+	}
+	public Message() {
+		super();
+	}
+
 	
 }

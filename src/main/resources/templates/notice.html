@@ -6,35 +6,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>失物管理平台</title>
-
-<!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet"/>
-<link href="css/style.css" rel="stylesheet"/>
-<link href="css/login.css" rel="stylesheet"/>
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet"/>
+	<!-- 日期控件 -->
+	<link href="css/bootstrap-datepicker3.css" rel="stylesheet">
+	<!-- 自己修改后的css样式 -->
+	<link href="css/style.css" rel="stylesheet"/>
+	<!-- 登录注册css样式 -->
+	<link href="css/login.css" rel="stylesheet"/>
+	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
+	<!-- BootStrap -->
 	<script src="js/bootstrap.min.js"></script>
+	<!-- 自己编写的JavaScript代码 -->
 	<script src="js/MyJavascript.js"></script>
-	<script src="js/jqthumb.min.js"></script>
-	
-	<script type="text/javascript">
-		//处理缩略图
-		function DrawImage(img){
-			console.info("裁图");
-			$(img).jqthumb({
-				//console.info("裁图");
-				width : '100%',//宽度
-				height : '100px',//高度
-				//position : { y: '50%', x: '50%'},//从图片的中间开始产生缩略图
-				zoom : '1',//缩放比例
-				method : 'auto'//提交方法，用于不同的浏览器环境，默认为‘auto’
-			});
-		}
-	</script>
+	<!-- 图片剪裁插件 -->
+	<!-- <script src="js/jqthumb.min.js"></script> -->
+	<!-- 日期控件 -->
+	<script src="js/bootstrap-datepicker.js"></script>
+	<!-- 日期控件中文 -->
+	<script src="js/bootstrap-datepicker.zh-CN.min.js"></script>
+
 <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
 <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
 <!--[if lt IE 9]-->
 	<script src="js/html5shiv.js"></script>
-	<script src="js/respond.min.js"></script>
+	<script src="js/respond.js"></script>
 <!-- [endif]-->	
 </head>
 <body>	
@@ -61,41 +58,48 @@
 			    <form class="form-horizontal" th:action="@{/findGoods(pageNum = 1)}" method="post">
 			    	<div class="row">
 			    		<div class="form-group">
-	             <label class="col-sm-2 control-label">物品名称:</label>
-	             <div class="col-sm-3">
-	             	<input type="text" class="form-control" name="g_name" placeholder="物品名称">
-	             </div>
-	             <label class="control-label col-sm-2">丢失地点:</label>
-	             <div class="col-sm-3">
-	             	<input type="text" class="form-control" name="g_place" placeholder="失物地点">
-	             </div>
-	            </div>
+			             <label class="col-sm-2 control-label">物品名称:</label>
+			             <div class="col-sm-3">
+			             	<input type="text" class="form-control" name="g_name" placeholder="物品名称">
+			             </div>
+			             <label class="control-label col-sm-2">丢失地点:</label>
+			             <div class="col-sm-3">
+			             	<input type="text" class="form-control" name="g_place" placeholder="失物地点">
+			             </div>
+			            </div>
 			    	</div>
-            <div class="row">
-            	<div class="form-group">
-             		<label class="col-sm-2 control-label">丢失日期：</label>
-             		<div class="col-sm-3">
-             			<input type="date" class="form-control" name="g_ltime" placeholder="丢失日期">
-             		</div>
-             		<label class="control-label col-sm-2">失物类型：</label>
-             		<div class="col-sm-3">
-             			<input type="hidden" name="classification.c_type" th:value="${c_type}">
-	            		<select class="form-control" name="g_type">
-										<option value="" selected="selected">---失物类型---</option>
-										<option value="电子产品">电子产品</option>
-										<option value="贵重物品">贵重物品</option>
-										<option value="书籍">书籍</option>
-										<option value="证件">证件</option>
-										<option value="服饰">服饰</option>
-										<option value="其他">其他</option>
-									</select>
-								</div>
-								<input type="submit" id="searchBtn" class="btn btn-default" style="color: white; background: royalblue;"></input>
-<!--             					<button class="btn btn-default" type="submit">查询</button> -->
-            	</div>            	
-            </div>
-
-          </form>
+		            <div class="row">
+		            	<div class="form-group">
+		             		<label class="col-sm-2 control-label">丢失日期:</label>
+		             		<div class="col-sm-3">
+		<!--              			<input type="date" class="form-control" name="g_ltime" placeholder="丢失日期"> -->
+									<div class="input-group date" id="datepicker" data-date-format="yyyy-mm-dd">
+			                            <input class="form-control" size="16" type="text"  readonly name="g_ltime" placeholder="丢失日期">
+			                            <div class="input-group-addon"><span class="add-on glyphicon glyphicon-calendar"></span></div>
+			                        </div>
+		             		</div>
+		             		<label class="control-label col-sm-2">失物类型:</label>
+		             		<div class="col-sm-3">
+		             			<input type="hidden" name="classification.c_type" th:value="${c_type}">
+			            		<select class="form-control" name="g_type">
+												<option value="" selected="selected">---失物类型---</option>
+												<option value="电子产品">电子产品</option>
+												<option value="贵重物品">贵重物品</option>
+												<option value="书籍">书籍</option>
+												<option value="证件">证件</option>
+												<option value="服饰">服饰</option>
+												<option value="其他">其他</option>
+											</select>
+										</div>
+										
+		<!--             					<button class="btn btn-default" type="submit">查询</button> -->
+		            	</div>            	
+		            </div>
+		            <div style="text-align:center">
+		            	<input  type="submit" id="searchBtn" class="btn btn-default" style="color: white; background: royalblue;margin: auto;width: 200px;"/>
+		            </div>
+					
+          		</form>
 			  </div>
 			</div>
 	    
@@ -109,21 +113,19 @@
 			  <div class="panel-body">
 			    <div class="row">
 			    	<div class="col-sm-6 col-md-4" th:each="goods : ${goods}">
-					    <div class="thumbnail">
+					    <div class="thumbnail" style="height: 320px;"> 
 					      <a th:href="@{detail(id = ${goods.g_id})}">
 					      	<div class="caption">
 						        <h4 th:text="${goods.g_title}">Thumbnail label</h4>
 						      </div>
 						      <hr />
-						      <img th:src="${'img/'+goods.g_picture}" class="img-responsive" οnlοad="DrawImage(this)" alt="失物图片" >
+						      <img th:src="${'img/'+goods.g_picture}" class="img-responsive center-block" οnlοad="DrawImage(this)" alt="失物图片" >
 <!-- 						      <img src="img/huai.jpg" class="img-responsive" οnlοad="DrawImage(this)" alt="失物图片" > -->
 <!-- 						       <img src="img/huai.jpg"alt="..."  class="img-responsive"  οnlοad="DrawImage(this)" > -->
 						      
 					      </a>
 					    </div>
-					  </div>
-					  
-					  
+					  </div>					  
 			    </div>
 			  </div>
 			  <div class="panel-footer">
@@ -143,7 +145,39 @@
 	</div>	
 	<!--尾部-->
 	<div th:replace="mycode :: myfoot"></div>
+	
+	
 	<script type="text/javascript">
+		//处理缩略图
+		function DrawImage(img){
+			console.info("裁图");
+			$(img).jqthumb({
+				//console.info("裁图");
+				width : '100%',//宽度
+				height : '100px',//高度
+				//position : { y: '50%', x: '50%'},//从图片的中间开始产生缩略图
+				zoom : '1',//缩放比例
+				method : 'auto'//提交方法，用于不同的浏览器环境，默认为‘auto’
+			});
+		}
+	</script>
+	
+	<script type="text/javascript">
+		$(function (){
+			var datepicker = $("#datepicker");
+			//初始化日期插件
+			datepicker.datepicker({
+				//设置为中文
+	            language:'zh-CN',
+	            //自动关闭
+	            autoclose: true
+			});
+			//获得当前日期
+			var current = new Date();
+			//设置可选日期最大值
+			datepicker.datepicker("setEndDate",current);
+		});
+	
 		function a(){
 			alert("aa");
 		}

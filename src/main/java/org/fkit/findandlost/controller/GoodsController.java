@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.fkit.findandlost.bean.Goods;
 import org.fkit.findandlost.bean.GoodsData;
 import org.fkit.findandlost.service.GoodsService;
+import org.fkit.findandlost.util.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -52,11 +53,11 @@ public class GoodsController {
 	 */
 	@RequestMapping("/GoodsData")
     @ResponseBody
-	public GoodsData GoodsData() {
+	public ResultVO<GoodsData> GoodsData() {
 		//System.out.println("goodsData");
 		GoodsData gt = goodsService.getGoodsData();
 		//System.out.println(gt.getLostTotal().isEmpty());
-		return gt;
+		return new ResultVO<GoodsData>(gt);
 	}
 	
 	@RequestMapping("/findGoodsByg_status")

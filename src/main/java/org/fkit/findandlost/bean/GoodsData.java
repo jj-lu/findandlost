@@ -37,4 +37,5 @@ public class GoodsData {
 		this.recentLost = recentLost;
 	}
 	
+	
 }

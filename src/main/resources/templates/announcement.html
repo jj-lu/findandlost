@@ -6,15 +6,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>失物管理平台</title>
-
-<!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet"/>
-<link href="css/style.css" rel="stylesheet"/>
-<link href="css/login.css" rel="stylesheet"/>
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/MyJavascript.js"></script>
-<script src="js/echarts.js"></script>
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet"/>
+	<!-- 日期控件 -->
+	<link href="css/bootstrap-datepicker3.css" rel="stylesheet">
+	<!-- 自己修改后的css样式 -->
+	<link href="css/style.css" rel="stylesheet"/>
+	<!-- 登录注册css样式 -->
+	<link href="css/login.css" rel="stylesheet"/>
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+	<!-- BootStrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- 自己编写的JavaScript代码 -->
+	<script src="js/MyJavascript.js"></script>
+	<!-- 图片剪裁插件 -->
+	<!-- <script src="js/jqthumb.min.js"></script> -->
+	<!-- 日期控件 -->
+	<script src="js/bootstrap-datepicker.js"></script>
+	<!-- 日期控件中文 -->
+	<script src="js/bootstrap-datepicker.zh-CN.min.js"></script>
+	<!-- echart -->
+	<script src="js/echarts.js"></script> 
 <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
 <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
 <!--[if lt IE 9]>
@@ -57,9 +70,14 @@
   </div>
 	
 <div th:replace="mycode :: myfoot"></div>
+
+	
+	
+
 <script>
 $(function () {
-	$.get("GoodsData", {}, function (resp) {
+	$.get("GoodsData", {}, function (result) {
+		var resp = result.data;
 		//填充失物类型柱状图
 		fillToGoodsType(resp.losttotal);
 		//填充近一周失物情况折线图
